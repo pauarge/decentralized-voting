@@ -1,0 +1,14 @@
+{
+    "dev": {
+        "app_function": "main.app",
+        "profile_name": null,
+        "project_name": "node",
+        "runtime": "python3.6",
+        "s3_bucket": "zappa-decvot",
+        "extra_permissions": [{
+            "Effect": "Allow",
+            "Action": ["ses:*"],
+            "Resource": "*"
+        }]
+    }
+}
