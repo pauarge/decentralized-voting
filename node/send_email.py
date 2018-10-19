@@ -1,3 +1,5 @@
+import hashlib
+
 from botocore.exceptions import ClientError
 import boto3
 
@@ -19,24 +21,7 @@ def send_email(current_election, url):
     SUBJECT = current_election.get('name')
 
     # The email body for recipients with non-HTML email clients.
-    BODY_TEXT = ("Amazon SES Test (Python)\r\n"
-                 "This email was sent with Amazon SES using the "
-                 "AWS SDK for Python (Boto)."
-                 )
-
-    # The HTML body of the email.
-    BODY_HTML = """<html>
-        <head></head>
-        <body>
-        <h1>Amazon SES Test (SDK for Python)</h1>
-        <p>This email was sent with
-        <a href='https://aws.amazon.com/ses/'>Amazon SES</a> using the
-        <a href='https://aws.amazon.com/sdk-for-python/'>
-        AWS SDK for Python (Boto)</a>.</p>
-        {}
-        </body>
-        </html>
-            """.format(url)
+    BODY_TEXT = "Please, visualize as HTML\r\n"
 
     # The character encoding for the email.
     CHARSET = "UTF-8"
@@ -45,13 +30,25 @@ def send_email(current_election, url):
     client = boto3.client('ses', region_name=AWS_REGION)
 
     # Try to send the email.
-    for email in current_election.get('users'):
+    for user in current_election.get('users'):
+        sha_1 = hashlib.sha1()
+        sha_1.update("{}{}".format(user.get('email'), user.get('id')).encode('utf-8'))
+
+        # The HTML body of the email.
+        BODY_HTML = """<html>
+                <head></head>
+                <body>
+                <h1>{}</h1>
+                <p>You can obtain your code for voting here: <a href="http://{}/verify?token={}">Voting link</a>.</p>
+                </body>
+                </html>""".format(current_election.get('name'), url, sha_1.hexdigest())
+
         try:
             # Provide the contents of the email.
             response = client.send_email(
                 Destination={
                     'ToAddresses': [
-                        email,
+                        user.get('email'),
                     ],
                 },
                 Message={
