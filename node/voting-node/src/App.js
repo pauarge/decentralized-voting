@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import CreateElection from "./components/CreateElection";
 import ManagedElections from "./components/ManagedElections";
-import Routes from "./ Routes";
 
 class App extends Component {
   constructor(props) {
@@ -15,6 +14,14 @@ class App extends Component {
         deadline: new Date(2019, 1, 1)
       }
     };
+    this.storeElection = this.storeElection.bind(this);
+  }
+  storeElection(election) {
+    console.log("Setting state to");
+    console.log(election);
+    this.setState({
+      election
+    });
   }
 
   render() {
@@ -76,7 +83,10 @@ class App extends Component {
           <hr />
 
           <Route exact path="/" component={Home} />
-          <Route path="/create" component={CreateElection} />
+          <Route
+            path="/create"
+            render={() => <CreateElection onSubmit={this.storeElection} />}
+          />
           <Route
             path="/current"
             render={() => (
