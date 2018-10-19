@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Verify</title>
+</head>
+
+<body>
+<form action="/qrcode" method="POST">
+    <input type="hidden" value="{{ token }}" name="token">
+    <p>
+        ID
+        <input type="text" name="id">
+    </p>
+    <p>
+        Email
+        <input type="text" name="email">
+    </p>
+    <p><input type="submit"></p>
+</form>
+</body>
+</html>
