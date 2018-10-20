@@ -9,7 +9,7 @@ def print_date_time():
 
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(func=print_date_time, trigger="interval", seconds=5)
+scheduler.add_job(func=print_date_time, trigger="interval", seconds=600)
 
 # Shut down the scheduler when exiting the app
 atexit.register(lambda: scheduler.shutdown())

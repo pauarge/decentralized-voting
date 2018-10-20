@@ -47,5 +47,4 @@ class Model:
                 'content': json.dumps(election),
             }
         )
-
         return True
