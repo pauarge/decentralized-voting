@@ -28,7 +28,7 @@ def election():
 
     if data and 'users' in data and 'name' in data and 'description' in data and 'expiration' in data \
             and 'options' in data:
-        if not app.blocks:
+        if len(app.blocks) < 1:
             elec = data
             elec['id'] = ''.join(
                 random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(32))
@@ -80,6 +80,8 @@ def qrcode():
 
 @app.route('/options', methods=['POST'])
 def options():
+    if len(app.blocks) < 1:
+        return jsonify({'error': 'no ongoing election'}), 400
     return jsonify(app.blocks[-1]['options'])
 
 
