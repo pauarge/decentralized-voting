@@ -49,7 +49,7 @@
             margin-bottom: 6px;
             margin-top: 12px;
         }
-        input[type="text"] {
+        input[type="text"], input[type="email"] {
             padding: 0 12px;
             height: 38px;
             width: calc(100% - 24px);
@@ -60,7 +60,9 @@
                         0 10px 16px -4px rgba(0,0,0,0.02);
         }
         input[type="text"]:active,
-        input[type="text"]:focus {
+        input[type="text"]:focus,
+        input[type="email"]:active,
+        input[type="email"]:focus{
             box-shadow: 0 0 0 1px #305ED4,
                         0 10px 16px -4px rgba(0,0,0,0.02);
         }
@@ -98,11 +100,11 @@
             <input type="hidden" value="{{ token }}" name="token">
             <div class="form__cell">
                 <label for="id">ID</label>
-                <input type="text" name="id">
+                <input type="text" name="id" id="id" required>
             </div>
             <div class="form__cell">
                 <label for="email">Email</label>
-                <input type="text" name="email">
+                <input type="email" name="email" id="email" required>
             </div>
         </div>
         <div class="form__footer">
