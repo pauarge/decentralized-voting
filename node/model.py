@@ -49,7 +49,7 @@ class Model:
         table = self.dynamodb.Table('elections')
         table.put_item(
             Item={
-                'id': election.get('id'),
+                'id': election[0].get('id'),
                 'content': json.dumps(election),
             }
         )
