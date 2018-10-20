@@ -12,29 +12,30 @@ import AddVoters from "./components/AddVoters";
 class App extends Component {
   constructor(props) {
     super(props);
-
+    this.fetchCurrentElection();
     this.state = {
       election: {
-        description: "A sample election",
-        title: "Placeholder",
-        candidates: [
-          { name: "Bonadio Mclean" },
-          { name: "Tiffney Bickis" },
-          { name: "Grogin Dubie" }
-        ],
-        candidatesB: [
-          "Peter Duke",
-          "Nope Nobel",
-          "Sandra Bollock",
-          "Román Luz",
-          "Arturo IV"
-        ],
+        description: "",
+        title: "",
+        candidates: [],
         deadline: new Date(2019, 1, 1)
       },
       voters: []
     };
     this.storeElection = this.storeElection.bind(this);
     this.storeVoters = this.storeVoters.bind(this);
+    this.fetchCurrentElection = this.fetchCurrentElection.bind(this);
+  }
+
+  async fetchCurrentElection() {
+    fetch("http://127.0.0.1:5000/options", {
+      method: "POST"
+    }).then(response => {
+      response.json().then(data => {
+        console.log(data);
+        this.setState({ election: data });
+      });
+    });
   }
 
   storeElection(election) {

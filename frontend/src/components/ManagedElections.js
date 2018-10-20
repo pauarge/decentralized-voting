@@ -21,7 +21,7 @@ export default class ManagedElections extends Component {
 
   handleScan(result) {
     console.log(this.state);
-    if (result && result === "test") {
+    if (result) {
       this.setState({
         result,
         disabledTo: false
