@@ -1,10 +1,16 @@
 import boto3
 import json
+import os
 
 
 class Model:
     def __init__(self):
-        self.dynamodb = boto3.resource('dynamodb', endpoint_url='http://localhost:8000/')
+        if os.environ.get('LOCAL_DYNAMO', '0') == '1':
+            print('local dynamo')
+            self.dynamodb = boto3.resource('dynamodb', endpoint_url='http://localhost:8000/')
+        else:
+            print('remote dynamo')
+            self.dynamodb = boto3.resource('dynamodb')
         try:
             table = self.dynamodb.create_table(
                 TableName='elections',
