@@ -9,11 +9,13 @@ import time
 from cron import scheduler
 from send_email import send_email
 from voting import validate_token, register_vote
+from model import Model
 
 app = Flask(__name__)
 qrcode = QRcode(app)
 
 app.current_election = None
+app.model = Model()
 known_hosts = []
 
 scheduler.start()
@@ -36,6 +38,8 @@ def election():
     app.current_election['id'] = election_id
     app.current_election['voted'] = []
     app.current_election['options'] = list(map(lambda x: {'name': x, 'votes': 0}, data.get('options')))
+
+    app.model.save(app.current_election)
     send_email(app.current_election, request.headers.get('host'))
 
     return jsonify({'current_election': app.current_election})
