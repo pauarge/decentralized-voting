@@ -1,6 +1,7 @@
 import hashlib
 
 from flask import Flask, request, jsonify, render_template, send_file
+from flask_cors import CORS
 from flask_qrcode import QRcode
 import random
 import string
@@ -12,6 +13,7 @@ from voting import validate_token, register_vote
 from model import Model
 
 app = Flask(__name__)
+CORS(app)
 qrcode = QRcode(app)
 
 app.current_election = None
