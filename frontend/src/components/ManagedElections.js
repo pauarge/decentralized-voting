@@ -72,8 +72,8 @@ export default class ManagedElections extends Component {
           <Redirect to="/options" />
         ) : (
           <Footer
-            from="/"
-            fromLabel="Home"
+            from="/confirm"
+            fromLabel="Confirm your vote"
             to="/options"
             disabledTo={this.state.result !== "test"}
             toLabel="Next"

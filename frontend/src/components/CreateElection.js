@@ -42,11 +42,12 @@ export default class CreateElection extends Component {
     this.setState({
       submitted: true
     });
+    console.log(this.state);
     this.props.onSubmit(this.state);
   };
 
   render() {
-    let { title, candidates } = this.state;
+    let { title, description, candidates } = this.state;
 
     const component = this.state.submitted ? (
       <Redirect to="/add-voters" />
@@ -63,6 +64,16 @@ export default class CreateElection extends Component {
               type="text"
               name="title"
               id="title"
+            />
+            <br />
+            <label className="Input__Label" htmlFor="description">
+              Description of the event
+            </label>
+            <input
+              className="Input__Text"
+              type="text"
+              name="description"
+              id="description"
             />
             <hr />
             <div className="Form__Rack">

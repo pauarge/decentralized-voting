@@ -15,6 +15,7 @@ class App extends Component {
 
     this.state = {
       election: {
+        description: "A sample election",
         title: "Placeholder",
         candidates: [
           { name: "Bonadio Mclean" },
@@ -58,8 +59,12 @@ class App extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        users: [{ email: "bb816@ic.ac.uk", id: "111" }],
+        users: voters.map(voter => ({
+          id: voter.id,
+          email: voter.email
+        })),
         name: election.title,
+        description: election.description,
         expiration: 1540015431,
         options: election.candidates.map(candidate => candidate.name)
       })
@@ -107,7 +112,7 @@ class App extends Component {
               render={() => <AddVoters onSubmit={this.storeVoters} />}
             />
             <Route
-              path="/current"
+              path="/options"
               render={() => (
                 <ManagedElections
                   title={election.title}
@@ -117,7 +122,7 @@ class App extends Component {
               )}
             />
             <Route
-              path="/options"
+              path="/current"
               render={() => (
                 <CandidateInput
                   component={CandidateInput}

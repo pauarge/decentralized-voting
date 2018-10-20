@@ -45,8 +45,8 @@ def election():
             broadcast_blocks(app.blocks, app.known_hosts)
             send_register_email(elec, request.headers.get('host'))
             return jsonify(app.blocks)
-        elif app.blocks[-1].get('expire') < time.time():
-            return jsonify({'error': 'there was an election but it expired, check results'})
+        # elif app.blocks[-1].get('expire') < time.time():
+            # return jsonify({'error': 'there was an election but it expired, check results'})
         else:
             return jsonify({'error': 'there is an election ongoing'})
 
@@ -59,7 +59,7 @@ def verify():
 
 
 @app.route('/qrcode', methods=['POST'])
-def qrcode():
+def get_qrcode():
     if 'email' in request.form and 'id' in request.form and 'token' in request.form:
         email = request.form.get('email')
         id = request.form.get('id')

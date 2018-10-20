@@ -20,18 +20,17 @@ export default class Candid0ateInput extends Component {
 
         <h3 className="Section__Header">Candidates</h3>
         <Poll pollName="lowerHouse">
-          {this.props.candidates.map(candidate => (
-            <PollOption candidateName={candidate.name} />
+          {this.props.candidates.map((candidate, idx) => (
+            <PollOption index={idx} candidateName={candidate.name} />
           ))}
         </Poll>
 
-        {/* <h3 className="Section__Header">Upper House (senate)</h3> */}
-        {/* <Poll pollName="lowerHouse">
-                    {this.props.candidatesB.map(candidateB => (
-                        <PollOption candidateName={candidateB}/>
-                    ))}
-                </Poll> */}
-        <Footer from="/current" fromLabel="Back" to="/confirm" toLabel="Next" />
+        <Footer
+          from="/add-voters"
+          fromLabel="Back"
+          to="/confirm"
+          toLabel="Next"
+        />
       </>
     );
   }
