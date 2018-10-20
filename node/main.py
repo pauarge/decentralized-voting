@@ -6,13 +6,17 @@ import random
 import string
 import time
 
+from cron import scheduler
 from send_email import send_email
 from voting import validate_token, register_vote
 
 app = Flask(__name__)
-app.current_election = None
 qrcode = QRcode(app)
+
+app.current_election = None
 known_hosts = []
+
+scheduler.start()
 
 global current_election
 
@@ -71,7 +75,7 @@ def vote():
 
     if user:
         app.current_election['voted'].append(user)
-        register_vote(data.get('option'), user, current_election)
+        result = register_vote(data.get('option'), user, current_election)
         return jsonify({'current_election': app.current_election})
     else:
         return "no user"
@@ -84,8 +88,10 @@ def proof():
 
 @app.route('/results', methods=['POST'])
 def results():
+    data = request.get_json()
+
     if not app.current_election:
         return 'no election'
-    elif app.current_election['expiration'] > time.time():
+    elif data.current_election['expiration'] > time.time():
         return 'results not available yet'
     return jsonify(app.current_election['options'])
