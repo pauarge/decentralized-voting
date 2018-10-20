@@ -8,7 +8,19 @@ import "./ManagedElections.scss";
 export default class Candid0ateInput extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      selected: 1
+    };
+
+    this.selectCandidate = this.selectCandidate.bind(this);
   }
+
+  selectCandidate(index) {
+    console.log(index);
+    this.setState({ selected: index });
+  }
+
   render() {
     console.log(this.props.candidates);
     return (
@@ -21,7 +33,12 @@ export default class Candid0ateInput extends Component {
         <h3 className="Section__Header">Candidates</h3>
         <Poll pollName="lowerHouse">
           {this.props.candidates.map((candidate, idx) => (
-            <PollOption index={idx} candidateName={candidate.name} />
+            <PollOption
+              arrayIndex={idx}
+              onSelect={this.selectCandidate}
+              candidateName={candidate.name}
+              isSelected={idx === this.state.selected}
+            />
           ))}
         </Poll>
 
