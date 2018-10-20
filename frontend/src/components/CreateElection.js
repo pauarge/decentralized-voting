@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import Box from "./UI/Containers";
 import { Redirect } from "react-router-dom";
+import "./CreateElection.scss";
 
 export default class CreateElection extends Component {
   constructor(props) {
@@ -49,29 +51,38 @@ export default class CreateElection extends Component {
     const component = this.state.submitted ? (
       <Redirect to="/add-voters" />
     ) : (
-      <form onSubmit={this.handleSubmit} onChange={this.handleChange}>
-        <label htmlFor="title">Title</label>
-        <input type="text" name="title" id="title" value={title} />
-
-        <button onClick={this.addCandidate}>Add candidate</button>
-        {candidates.map((val, idx) => {
-          let candidateId = `candidate-${idx}`;
-          return (
-            <div key={idx}>
-              <label htmlFor={candidateId}>{`Candidate #${idx + 1}`}</label>
-              <input
-                type="text"
-                name={candidateId}
-                data-id={idx}
-                id={candidateId}
-                value={candidates[idx].name}
-                className="name"
-              />
-            </div>
-          );
-        })}
-        <input type="submit" value="Submit" />
-      </form>
+      <>
+      <h1 className="Page__Title">Register a new election event</h1>
+      <Box>
+        <form onSubmit={this.handleSubmit} onChange={this.handleChange}>
+          
+          <label className="Input__Label" htmlFor="title">Name of the event</label>
+          <input className="Input__Text" type="text" name="title" id="title" value={title} />
+          <hr />
+          <div className="Form__Rack">
+            {candidates.map((val, idx) => {
+              let candidateId = `candidate-${idx}`;
+              return (
+                <div className="Form__Cell" key={idx}>
+                  <label className="Input__Label" htmlFor={candidateId}>{`Candidate #${idx + 1}`}</label>
+                  <input
+                    type="text"
+                    name={candidateId}
+                    data-id={idx}
+                    id={candidateId}
+                    value={candidates[idx].name}
+                    className="name Input__Text"
+                  />
+                </div>
+              );
+            })}
+            <button className="Button Button__Secondary" onClick={this.addCandidate}>Add candidate</button>
+          </div>
+          
+          <input type="submit" value="Submit" className="Button Button__Green" />
+        </form>
+      </Box>
+      </>
     );
 
     return component;
