@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import QrReader from "react-qr-reader";
+import { Redirect } from "react-router-dom";
 import Box from "./UI/Containers";
 import Footer from "./Footer/FooterContainer";
 import Poll, { PollOption } from "./UI/Poll";
@@ -11,16 +12,19 @@ export default class ManagedElections extends Component {
     super(props);
 
     this.state = {
-      result: null
+      result: null,
+      disabledTo: true
     };
 
     this.handleScan = this.handleScan.bind(this);
   }
 
   handleScan(result) {
-    if (result) {
+    console.log(this.state);
+    if (result && result === "test") {
       this.setState({
-        link: result
+        result,
+        disabledTo: false
       });
       console.log(result);
     }
@@ -64,7 +68,17 @@ export default class ManagedElections extends Component {
             </div>
           </div>
         </Box>
-        <Footer from="/" fromLabel="Home" to="/options" toLabel="Next" />
+        {this.state.result === "test" ? (
+          <Redirect to="/options" />
+        ) : (
+          <Footer
+            from="/"
+            fromLabel="Home"
+            to="/options"
+            disabledTo={this.state.result !== "test"}
+            toLabel="Next"
+          />
+        )}
       </>
     );
   }
