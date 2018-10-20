@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from "prop-types";
 import Box from "./UI/Containers";
 import Poll, {PollOption} from "./UI/Poll";
+import Footer from "./Footer/FooterContainer";
 import "./ManagedElections.scss";
 
 export default class Candid0ateInput extends Component {
@@ -27,6 +28,7 @@ export default class Candid0ateInput extends Component {
                         <PollOption candidateName={candidateB}/>
                     ))}
                 </Poll>
+                <Footer from="/current" fromLabel="Back" to="/current" toLabel="Next" />
             </>
         );
     }

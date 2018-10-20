@@ -1,15 +1,24 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+import LinkButton from './../UI/LinkButton';
 import "./FooterContainer.scss";
 
 export default class Footer extends Component {
+    constructor(props) {
+        super(props);
+    }
     render() {
         return(
             <div className="Footer">
                 <div className="Footer__Nav">
-                    <button className="Button Button__Secondary Button__Back">Back</button>
-                    <button className="Button Button__Green Button__Right Button__Next">Next step</button>
+                <LinkButton to={this.props.from} className="Button Button__Secondary Button__Back">{this.props.fromLabel}</LinkButton>
+                <LinkButton to={this.props.to} className="Button Button__Green Button__Right Button__Next">{this.props.toLabel}</LinkButton>
                 </div>
             </div>
         );
     }
+}
+
+Footer.propTypes = {
+    to: PropTypes.string.isRequired
 }

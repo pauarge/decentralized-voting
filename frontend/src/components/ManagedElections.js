@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import QrReader from "react-qr-reader";
 import Box from "./UI/Containers";
+import Footer from "./Footer/FooterContainer";
 import Poll, {PollOption} from "./UI/Poll";
 import "./ManagedElections.scss";
 
@@ -63,6 +64,7 @@ export default class ManagedElections extends Component {
             </div>
           </div>
         </Box>
+        <Footer from="/" fromLabel="Home" to="/options" toLabel="Next" />
       </>
     );
   }
