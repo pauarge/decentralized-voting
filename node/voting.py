@@ -12,7 +12,7 @@ def random_string():
 
 
 def generate_token(election, user):
-    sha = hashlib.sha256()
+    sha = hashlib.sha1()
     sha.update("{}{}{}{}".format(user.get('email'), SALT, user.get('id'), election.get('id')).encode('utf-8'))
     return sha.hexdigest()
 
