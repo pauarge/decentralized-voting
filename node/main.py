@@ -10,7 +10,7 @@ import os
 from config import SALT_QR, PADDING_CHAR
 from cryptography import generate_secret_key_for_AES_cipher, encrypt_message
 from send_email import send_register_email
-from voting import validate_token, register_vote, generate_token, broadcast_blocks, random_string
+from voting import validate_token, generate_token, broadcast_blocks, random_string
 from model import Model
 
 app = Flask(__name__)
@@ -36,17 +36,17 @@ def election():
             elec['voted'] = []
             elec['options'] = [{'index': i, 'name': x} for i, x in enumerate(data.get('options'))]
             elec['pointer'] = 0
-            elec['hash'] = ''
             elec['owner'] = app.server_id
             elec['results'] = encrypt_message('', app.secret_key, PADDING_CHAR).decode('utf-8')
+            elec['hash'] = ''
 
             app.blocks.append(elec)
             app.model.save(app.blocks, app.secret_key)
             broadcast_blocks(app.blocks, app.known_hosts)
             send_register_email(elec, request.headers.get('host'))
             return jsonify(app.blocks)
-        elif app.blocks[-1].get('expire') < time.time():
-            return jsonify({'error': 'there was an election but it expired, check results'})
+        # elif app.blocks[-1].get('expire') < time.time():
+        #    return jsonify({'error': 'there was an election but it expired, check results'})
         else:
             return jsonify({'error': 'there is an election ongoing'})
 
@@ -59,7 +59,7 @@ def verify():
 
 
 @app.route('/qrcode', methods=['POST'])
-def qrcode():
+def get_qrcode():
     if 'email' in request.form and 'id' in request.form and 'token' in request.form:
         email = request.form.get('email')
         id = request.form.get('id')
@@ -105,18 +105,30 @@ def vote():
         if user:
             new_block = copy.copy(app.blocks[-1])
             new_block['voted'].append(user)
-
-            sha = hashlib.sha512()
-            sha.update(json.dumps(app.blocks[-1]))
-            new_block['hash'] = sha.hexdigest()
+            new_block['pointer'] += 1
+            new_block['owner'] = app.server_id
 
             try:
                 parsed_option = int(data.get('option'))
             except TypeError:
                 return jsonify({'error': 'invalid option'}), 400
 
-            result = register_vote(parsed_option, user, new_block)
-            if result:
+            result_hash = None
+            for o in app.blocks[-1]['options']:
+                if o['index'] == parsed_option:
+                    new_block['results'] = encrypt_message(
+                        '{},,,{}'.format(new_block['results'], parsed_option),
+                        app.secret_key,
+                        PADDING_CHAR).decode('utf-8')
+                    sha = hashlib.sha512()
+                    sha.update("{}{}".format(app.blocks[-1]['id'], user))
+                    result_hash = sha.hexdigest()
+
+            if result_hash:
+                sha = hashlib.sha512()
+                sha.update(json.dumps(app.blocks[-1]))
+                new_block['hash'] = sha.hexdigest()
+
                 app.blocks.append(new_block)
                 app.model.save(app.blocks)
                 broadcast_blocks(app.blocks, app.known_hosts)

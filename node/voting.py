@@ -24,16 +24,6 @@ def validate_token(election, token):
     return None
 
 
-def register_vote(option, user, election):
-    for o in election['options']:
-        if o['name'] == option:
-            o['votes'] += 1
-            sha = hashlib.sha512()
-            sha.update("{}{}".format(election['id'], user))
-            return sha.hexdigest()
-    return None
-
-
 def broadcast_blocks(blocks, known_hosts):
     for host in known_hosts:
         requests.post(host, json.dumps(blocks))
