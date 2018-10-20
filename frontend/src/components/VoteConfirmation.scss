@@ -1,0 +1,27 @@
+.Vote__Item {
+    display: flex;
+    margin-bottom: 24px;
+}
+.Vote__Avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 56px;
+    margin-right: 12px;
+    background: #ddd;
+}
+.Vote__Info {
+    width: 100%;
+    .Vote__Name {
+        margin-top: 8px;
+        margin-bottom: 4px;
+        font-size: 1.2em;
+    }
+    .Vote__Section {
+        margin-top: 4px;
+        margin-bottom: 4px;
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: #305ed4;
+    }
+}

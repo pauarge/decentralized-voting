@@ -11,6 +11,7 @@ export default () => (
       <Route path="/create" component={CreateElection} />
       <Route path="/current" component={ManagedElections} />
       <Route path="/options" component={CandidateInput} />
+      <Route path="/confirm" component={VoteConfirmation} />
     </Switch>
   </Router>
 );

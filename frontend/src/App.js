@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import CreateElection from "./components/CreateElection";
 import ManagedElections from "./components/ManagedElections";
+import VoteConfirmation from "./components/VoteConfirmation";
 import Footer from "./components/Footer/FooterContainer";
 import "./normalize.css";
 import "./App.scss";
@@ -104,6 +105,10 @@ class App extends Component {
                   deadline={election.deadline}
                 />
               )}
+            />
+            <Route
+              path="/confirm"
+              component={VoteConfirmation}
             />
           </div>
         </>

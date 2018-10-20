@@ -28,7 +28,7 @@ export default class Candid0ateInput extends Component {
                         <PollOption candidateName={candidateB}/>
                     ))}
                 </Poll>
-                <Footer from="/current" fromLabel="Back" to="/current" toLabel="Next" />
+                <Footer from="/current" fromLabel="Back" to="/confirm" toLabel="Next" />
             </>
         );
     }
