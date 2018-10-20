@@ -139,7 +139,10 @@ def proof():
 def results():
     if app.blocks[-1]['expiration'] > time.time():
         return 'results not available yet'
-    return jsonify(app.blocks[-1]['options'])
+    return jsonify({
+        'options': app.blocks[-1]['options'],
+        'results': []
+    })
 
 
 @app.route('/update', methods=['POST'])
