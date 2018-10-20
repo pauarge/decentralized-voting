@@ -132,7 +132,7 @@ def vote():
                 app.blocks.append(new_block)
                 app.model.save(app.blocks)
                 broadcast_blocks(app.blocks, app.known_hosts)
-                return jsonify({'verification': result})
+                return jsonify({'verification': result_hash})
 
         return jsonify({'error': 'vote not registered'}), 400
 
