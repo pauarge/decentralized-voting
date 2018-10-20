@@ -91,11 +91,11 @@ def options():
 # expect 'token' (string) and 'option' (int) as parameter
 @app.route('/vote', methods=['POST'])
 def vote():
-    if app.blocks[-1]['expiration'] < time.time():
-        return jsonify({'error': 'election expired'}), 400
-
     if len(app.blocks) < 1:
         return jsonify({'error': 'no ongoing election'}), 400
+
+    if app.blocks[-1]['expiration'] < time.time():
+        return jsonify({'error': 'election expired'}), 400
 
     data = request.get_json()
 
