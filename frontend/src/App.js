@@ -105,6 +105,9 @@ class App extends Component {
                 <div className="Header__Link">
                   <Link to="/current">Current Election</Link>
                 </div>
+                <div className="Header__Link">
+                  <Link to="/verify">Verify Vote</Link>
+                </div>
               </div>
             </div>
             <div className="Header__Lower">
