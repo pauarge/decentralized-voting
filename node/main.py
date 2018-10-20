@@ -4,9 +4,10 @@ from flask import Flask, request, jsonify, render_template, send_file
 from flask_qrcode import QRcode
 import random
 import string
+import time
 
 from send_email import send_email
-from validate import validate_token
+from voting import validate_token, register_vote
 
 app = Flask(__name__)
 app.current_election = None
@@ -70,12 +71,21 @@ def vote():
 
     if user:
         app.current_election['voted'].append(user)
-        # Register vote
+        register_vote(data.get('option'), current_election)
         return jsonify({'current_election': app.current_election})
     else:
         return "no user"
 
 
+@app.route("/proof", methods=['POST'])
+def proof():
+    return "voting proof"
+
+
 @app.route('/results', methods=['POST'])
 def results():
-    return 'not available yet'
+    if not app.current_election:
+        return 'no election'
+    elif app.current_election['expiration'] > time.time():
+        return 'results not available yet'
+    return jsonify(app.current_election['options'])
