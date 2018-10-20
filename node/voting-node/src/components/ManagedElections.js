@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-export default class ManagedElections extends Component {
+/*export default class ManagedElections extends Component {
   constructor(props) {
     super(props);
   }
@@ -15,6 +15,17 @@ export default class ManagedElections extends Component {
         ))}
         <p>Deadline: {this.props.date}</p>
       </div>
+    );
+  }
+}*/
+
+export default class ManagedElections extends Component {
+  /* constructor(props) {
+    super(props);
+  } */
+  render() {
+    return(
+      <>ManagedElections</>
     );
   }
 }

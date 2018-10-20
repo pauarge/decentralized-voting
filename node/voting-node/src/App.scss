@@ -1,0 +1,59 @@
+// App.scss
+
+// 0. UI booting
+@import './components/UI/Vars.scss';
+@import './components/UI/Base.scss';
+@import './components/UI/Fonts.scss';
+
+// Scaffo
+html {
+    background: #f2f2f2;
+}
+
+// Temp
+.Header {
+    display: block;
+    left: 0;
+    position: relative;
+    top: 0;
+}
+.Header__Upper {
+    background: #000;
+    height: 56px;
+    .Header__Nav {
+        align-items: center;
+        display: flex; 
+        height: 56px;
+        margin-left: 48px;
+        margin-right: 48px;
+        max-width: 960px;
+    }
+    .Header__Link,
+    .Header__Logo {
+        color: #fff;
+        font-weight: 600;
+        margin: 0 1vw;
+        & > a {
+            color: #fff;
+            text-decoration: none;
+        }
+    }
+    .Header__Logo {
+        opacity: .66;
+    }
+}
+.Header__Lower {
+    align-items: center;
+    background: rgba(48,94,212,1);
+    display: flex;
+    height: 80px;
+    padding-left: 48px;
+    padding-right: 48px;
+    .Header__Title {
+        color: #fff;
+        line-height: 1;
+        margin-top: -4px;
+        margin-bottom: 0;
+        margin-left: 1vw;
+    }
+}
