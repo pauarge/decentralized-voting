@@ -11,9 +11,9 @@ def generate_token(election, user):
     return sha.hexdigest()
 
 
-def validate_token(election, token, voted):
-    for user in election['users']:
-        if user.get('id') not in voted and generate_token(election, user) == token:
+def validate_token(election, token):
+    for user in election.get('users'):
+        if user.get('id') not in election['voted'] and generate_token(election, user) == token:
             return user.get('id')
     return None
 

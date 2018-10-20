@@ -89,26 +89,39 @@ def options():
 @app.route('/vote', methods=['POST'])
 def vote():
     if app.blocks[-1]['expiration'] < time.time():
-        return jsonify({'error': 'poll expired'})
+        return jsonify({'error': 'election expired'}), 400
+
+    if len(app.blocks) < 1:
+        return jsonify({'error': 'no ongoing election'}), 400
 
     data = request.get_json()
-    user = validate_token(data.get('token'), app.blocks[-1], data.blocks[-1]['voted'])
 
-    if user:
-        new_block = copy.copy(app.blocks[-1])
-        new_block['voted'].append(user)
+    if data and 'token' in data and 'option' in data:
+        user = validate_token(app.blocks[-1], data.get('token'))
 
-        sha = hashlib.sha512()
-        sha.update(json.dumps(app.blocks[-1]))
-        new_block['hash'] = sha.hexdigest()
-        result = register_vote(data.get('option'), user, new_block)
-        if result:
-            app.blocks.append(new_block)
-            app.model.save(app.blocks)
-            broadcast_blocks(app.blocks, app.known_hosts)
-            return jsonify({'blocks': app.blocks, 'verification': result})
+        if user:
+            new_block = copy.copy(app.blocks[-1])
+            new_block['voted'].append(user)
 
-    return jsonify({'error': 'vote not registered'})
+            sha = hashlib.sha512()
+            sha.update(json.dumps(app.blocks[-1]))
+            new_block['hash'] = sha.hexdigest()
+
+            try:
+                parsed_option = int(data.get('option'))
+            except TypeError:
+                return jsonify({'error': 'invalid option'}), 400
+
+            result = register_vote(parsed_option, user, new_block)
+            if result:
+                app.blocks.append(new_block)
+                app.model.save(app.blocks)
+                broadcast_blocks(app.blocks, app.known_hosts)
+                return jsonify({'blocks': app.blocks, 'verification': result})
+
+        return jsonify({'error': 'vote not registered'}), 400
+
+    return jsonify({'error': 'invalid parameters'}), 400
 
 
 @app.route("/proof", methods=['POST'])
