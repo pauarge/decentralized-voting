@@ -61,10 +61,7 @@ def get_qrcode():
     sha_1.update("{}{}".format(email, id).encode('utf-8'))
 
     if sha_1.hexdigest() == token:
-        return send_file(
-            qrcode(token, mode='raw'),
-            mimetype='image/png'
-        )
+        return send_file(qrcode(token, mode='raw'), mimetype='image/png')
     else:
         return 'incorrect parameters'
 
@@ -80,6 +77,7 @@ def vote():
     if user:
         app.current_election['voted'].append(user)
         result = register_vote(data.get('option'), user, current_election)
+        app.model.save(current_election)
         return jsonify({'current_election': app.current_election})
     else:
         return "no user"
