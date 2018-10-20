@@ -69,6 +69,7 @@ def get_qrcode():
         return 'incorrect parameters'
 
 
+# expect 'token' (string) and 'option' (int) as parameter
 @app.route('/vote', methods=['POST'])
 def vote():
     if app.blocks[-1]['expiration'] < time.time():
