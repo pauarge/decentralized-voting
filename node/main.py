@@ -88,7 +88,12 @@ def get_qrcode():
 def options():
     if len(app.blocks) < 1:
         return jsonify({'error': 'no ongoing election'}), 400
-    return jsonify(app.blocks[-1]['options'])
+    return jsonify({
+        'id': app.blocks[-1]['id'],
+        'name': app.blocks[-1]['name'],
+        'description': app.blocks[-1]['description'],
+        'candidates': app.blocks[-1]['options']
+    })
 
 
 # expect 'token' (string) and 'option' (int) as parameter
