@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import QrReader from "react-qr-reader";
 import Box from "./UI/Containers";
 import Footer from "./Footer/FooterContainer";
-import Poll, {PollOption} from "./UI/Poll";
+import Poll, { PollOption } from "./UI/Poll";
 import "./ManagedElections.scss";
 
 export default class ManagedElections extends Component {
@@ -39,28 +39,28 @@ export default class ManagedElections extends Component {
     };
     return (
       <>
-        <h1 className="Page__Title">Welcome
-          <span className="Page__Title--deadline">Deadline: {deadlineDate}</span>
+        <h1 className="Page__Title">
+          Welcome
+          <span className="Page__Title--deadline">
+            Deadline: {deadlineDate}
+          </span>
         </h1>
         <Box isLarge="false">
           <div className="QR__Container">
             <div className="QR__Placeholder">
-            <QrReader
-              style={previewStyle}
-              onError={this.handleError}
-              onScan={this.handleScan}
-            />
+              <QrReader
+                style={previewStyle}
+                onError={this.handleError}
+                onScan={this.handleScan}
+              />
             </div>
             <div className="QR__Instructions">
               <h3 className="QR__Tagline">
-                Please scan the QR code provided to you in order to authenticate.
+                Please scan the QR code provided to you in order to
+                authenticate.
               </h3>
-              <p>
-                First chunk of text.
-              </p>
-              <p>
-                Second chunk of text.
-              </p>
+              <p>First chunk of text.</p>
+              <p>Second chunk of text.</p>
             </div>
           </div>
         </Box>
@@ -69,7 +69,6 @@ export default class ManagedElections extends Component {
     );
   }
 }
-
 
 ManagedElections.propTypes = {
   title: PropTypes.string.isRequired,

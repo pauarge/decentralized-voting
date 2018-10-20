@@ -16,7 +16,11 @@ class App extends Component {
     this.state = {
       election: {
         title: "Placeholder",
-        candidates: ["Bonadio Mclean", "Tiffney Bickis", "Grogin Dubie"],
+        candidates: [
+          { name: "Bonadio Mclean" },
+          { name: "Tiffney Bickis" },
+          { name: "Grogin Dubie" }
+        ],
         candidatesB: [
           "Peter Duke",
           "Nope Nobel",
@@ -33,18 +37,20 @@ class App extends Component {
   }
 
   storeElection(election) {
-    console.log("Storng election");
+    // console.log("Storing election");
     this.setState({
       election
     });
   }
 
   storeVoters(voters) {
-    console.log("Storing voters");
+    // console.log(voters);
 
     const { election } = this.state;
 
-    this.setState(oldState => oldState.voters.concat(voters));
+    this.setState({
+      voters
+    });
 
     fetch("http://127.0.0.1:5000/election", {
       method: "POST",
@@ -52,7 +58,7 @@ class App extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        users: [{ email: "bb816@ic.ac.uk", id: 111 }],
+        users: [{ email: "bb816@ic.ac.uk", id: "111" }],
         name: election.title,
         expiration: 1540015431,
         options: election.candidates.map(candidate => candidate.name)
@@ -106,7 +112,7 @@ class App extends Component {
                 <ManagedElections
                   title={election.title}
                   candidates={election.candidates}
-                  deadline={election.deadline}
+                  deadline={new Date(2019, 0, 1)}
                 />
               )}
             />
@@ -122,10 +128,7 @@ class App extends Component {
                 />
               )}
             />
-            <Route
-              path="/confirm"
-              component={VoteConfirmation}
-            />
+            <Route path="/confirm" component={VoteConfirmation} />
           </div>
         </>
       </Router>
