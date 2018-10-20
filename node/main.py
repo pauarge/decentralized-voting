@@ -71,7 +71,7 @@ def vote():
 
     if user:
         app.current_election['voted'].append(user)
-        register_vote(data.get('option'), current_election)
+        register_vote(data.get('option'), user, current_election)
         return jsonify({'current_election': app.current_election})
     else:
         return "no user"
