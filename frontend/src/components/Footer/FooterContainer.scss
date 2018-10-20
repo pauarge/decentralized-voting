@@ -1,53 +1,56 @@
 .Footer {
-    width: 100%;
-    margin: 0 auto;
-    position: fixed;
-    bottom: 0;
-    z-index: 99;
-    background: #FFFFFF;
-    box-shadow: 0 0 0 1px rgba(0,0,0,0.01), 
-                0 8px 32px -8px rgba(0,0,0,0.08);
-    //order-radius: 4px;
-    padding: 8px;
-    left: 0;
+  width: 100%;
+  margin: 0 auto;
+  position: fixed;
+  bottom: 0;
+  z-index: 99;
+  background: #ffffff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.01), 0 8px 32px -8px rgba(0, 0, 0, 0.08);
+  //order-radius: 4px;
+  padding: 8px;
+  left: 0;
 }
 .Footer__Nav {
-    max-width: 990px;
-    width: 100%;
-    margin: 0 auto;
-    display: block;
+  max-width: 990px;
+  width: 100%;
+  margin: 0 auto;
+  display: block;
 }
 .Button {
-    display: inline-block;
-    padding: 12px 28px;
-    border-radius: 4px;
-    height: 48px;
-    border: none;
-    box-shadow: none;
-    font-weight: 600;
-    &.Button__Green {
-        background: #2CBD69;
-        color: #fff;
+  display: inline-block;
+  padding: 12px 28px;
+  border-radius: 4px;
+  height: 48px;
+  border: none;
+  box-shadow: none;
+  font-weight: 600;
+  &.Button__Green {
+    background: #2cbd69;
+    color: #fff;
+  }
+  &.Button__Secondary {
+    background: #eee;
+    color: rgba(48, 94, 212, 1);
+  }
+  &.Button__Disabled {
+    background: #eee;
+    color: #999;
+    cursor: not-allowed;
+  }
+  &.Button__Back {
+    &::before {
+      content: "←";
+      margin-right: 8px;
     }
-    &.Button__Secondary {
-        background: #eee;
-        color: rgba(48,94,212,1);
+  }
+  &.Button__Next {
+    &::after {
+      content: "→";
+      margin-left: 8px;
     }
-    &.Button__Back {
-        &::before {
-            content: "←";
-            margin-right: 8px;
-        }
-    }
-    &.Button__Next {
-        &::after {
-            content: "→";
-            margin-left: 8px;
-        }
-    }
-    &.Button__Right {
-        float: right;
-        right: 0;
-    }
+  }
+  &.Button__Right {
+    float: right;
+    right: 0;
+  }
 }
-

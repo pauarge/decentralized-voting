@@ -12,12 +12,10 @@ export default class AddVoters extends Component {
   handleChange = e => {
     if (["email", "id"].includes(e.target.className)) {
       let voters = [...this.state.voters];
-      voters[e.target.dataset.id][
-        e.target.className
-      ] = e.target.value.toUpperCase();
+      voters[e.target.dataset.id][e.target.className] = e.target.value;
       this.setState({ voters }, () => console.log(this.state.voters));
     } else {
-      this.setState({ [e.target.name]: e.target.value.toUpperCase() });
+      this.setState({ [e.target.name]: e.target.value });
     }
   };
 
@@ -29,6 +27,8 @@ export default class AddVoters extends Component {
   };
 
   handleSubmit = e => {
+    console.log("AddVoters state");
+    console.log(this.state);
     e.preventDefault();
     this.props.onSubmit(this.state);
     this.setState({ finalized: true });
@@ -41,45 +41,56 @@ export default class AddVoters extends Component {
       <Redirect to="/current" />
     ) : (
       <>
-      <h1 className="Page__Title">Add voters to the census</h1>
-      <Box>
-        <form onSubmit={this.handleSubmit} onChange={this.handleChange}>
-          {voters.map((val, idx) => {
-            let voterId = `voter-${idx}`;
-            let voterEmail = `voter-email-${idx}`;
-            return (
-              <div className="Form__Doubles" key={idx}>
-                <div className="Form__Half">
-                  <label className="Input__Label" htmlFor={voterEmail}>Email </label>
-                  <input
-                    type="text"
-                    name={voterEmail}
-                    data-id={idx}
-                    id={voterEmail}
-                    value={voters[idx].email}
-                    className="email Input__Text"
-                  />
+        <h1 className="Page__Title">Add voters to the census</h1>
+        <Box>
+          <form onSubmit={this.handleSubmit} onChange={this.handleChange}>
+            {voters.map((val, idx) => {
+              let voterId = `voter-${idx}`;
+              let voterEmail = `voter-email-${idx}`;
+              return (
+                <div className="Form__Doubles" key={idx}>
+                  <div className="Form__Half">
+                    <label className="Input__Label" htmlFor={voterEmail}>
+                      Email{" "}
+                    </label>
+                    <input
+                      type="text"
+                      name={voterEmail}
+                      data-id={idx}
+                      id={voterEmail}
+                      className="email"
+                    />
+                  </div>
+                  <div className="Form__Half">
+                    <label className="Input__Label" htmlFor={voterId}>
+                      Voter ID{" "}
+                    </label>
+                    <input
+                      type="text"
+                      name={voterId}
+                      data-id={idx}
+                      id={voterId}
+                      className="id"
+                    />
+                  </div>
                 </div>
-                <div className="Form__Half">
-                  <label className="Input__Label" htmlFor={voterId}>Voter ID </label>
-                  <input
-                    type="text"
-                    className=""
-                    name={voterId}
-                    data-id={idx}
-                    id={voterId}
-                    value={voters[idx].id}
-                    className="id Input__Text"
-                  />
-                </div>
-              </div>
-            );
-          })}
-          <button className="Button Button__Secondary" onClick={this.addVoter}>Add voter</button>
-          <hr/>
-          <input type="submit" className="Button Button__Green" value="Finalize" />
-        </form>
-      </Box>
+              );
+            })}
+            <button
+              type="button"
+              className="Button Button__Secondary"
+              onClick={this.addVoter}
+            >
+              Add voter
+            </button>
+            <hr />
+            <input
+              type="submit"
+              className="Button Button__Green"
+              value="Finalize"
+            />
+          </form>
+        </Box>
       </>
     );
 
@@ -87,6 +98,6 @@ export default class AddVoters extends Component {
   }
 }
 
-AddVoters.PropTypes = {
+AddVoters.propTypes = {
   onSubmit: PropTypes.func.isRequired
 };
