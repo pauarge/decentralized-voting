@@ -7,6 +7,7 @@ import Footer from "./components/Footer/FooterContainer";
 import "./normalize.css";
 import "./App.scss";
 import CandidateInput from "./components/CandidateInput";
+import AddVoters from "./components/AddVoters";
 
 class App extends Component {
   constructor(props) {
@@ -24,13 +25,27 @@ class App extends Component {
           "Arturo IV"
         ],
         deadline: new Date(2019, 1, 1)
-      }
+      },
+      voters: []
     };
     this.storeElection = this.storeElection.bind(this);
+    this.storeVoters = this.storeVoters.bind(this);
   }
 
   storeElection(election) {
     console.log("Storng election");
+    this.setState({
+      election
+    });
+  }
+
+  storeVoters(voters) {
+    console.log("Storing voters");
+
+    const { election } = this.state;
+
+    this.setState(oldState => oldState.voters.concat(voters));
+
     fetch("http://127.0.0.1:5000/election", {
       method: "POST",
       headers: {
@@ -42,9 +57,6 @@ class App extends Component {
         expiration: 1540015431,
         options: election.candidates.map(candidate => candidate.name)
       })
-    });
-    this.setState({
-      election
     });
   }
 
@@ -83,6 +95,10 @@ class App extends Component {
             <Route
               path="/create"
               render={() => <CreateElection onSubmit={this.storeElection} />}
+            />
+            <Route
+              path="/add-voters"
+              render={() => <AddVoters onSubmit={this.storeVoters} />}
             />
             <Route
               path="/current"

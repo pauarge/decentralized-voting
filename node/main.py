@@ -10,7 +10,7 @@ import copy
 import json
 
 from config import SALT_QR
-from send_email import send_email
+from send_email import send_register_email
 from voting import validate_token, register_vote, generate_token, broadcast_blocks
 from model import Model
 
@@ -34,14 +34,14 @@ def election():
     elec['id'] = ''.join(
         random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(32))
     elec['voted'] = []
-    elec['options'] = list(map(lambda x: {'name': x, 'votes': 0}, data.get('options')))
+    elec['options'] = [{'index': i, 'name': x, 'votes': 0} for i, x in enumerate(data.get('options'))]
     elec['pointer'] = 0
     elec['hash'] = ''
 
     app.blocks.append(elec)
     app.model.save(app.blocks)
     broadcast_blocks(app.blocks, known_hosts)
-    send_email(elec, request.headers.get('host'))
+    send_register_email(elec, request.headers.get('host'))
     return jsonify(app.blocks)
 
 
@@ -69,6 +69,11 @@ def get_qrcode():
         return 'incorrect parameters'
 
 
+@app.route('/options', methods=['POST'])
+def options():
+    return jsonify(app.blocks[-1]['options'])
+
+
 # expect 'token' (string) and 'option' (int) as parameter
 @app.route('/vote', methods=['POST'])
 def vote():
@@ -76,7 +81,7 @@ def vote():
         return jsonify({'error': 'poll expired'})
 
     data = request.get_json()
-    user = validate_token(data.get('token'), app.blocks[-1])
+    user = validate_token(data.get('token'), app.blocks[-1], data.blocks[-1]['voted'])
 
     if user:
         new_block = copy.copy(app.blocks[-1])
@@ -97,7 +102,8 @@ def vote():
 
 @app.route("/proof", methods=['POST'])
 def proof():
-    return "voting proof"
+    token = request.form.get('token')
+    return send_file(qrcode(token, mode='raw'), mimetype='image/png')
 
 
 @app.route('/results', methods=['POST'])
