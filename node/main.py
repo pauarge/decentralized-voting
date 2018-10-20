@@ -34,7 +34,7 @@ def election():
     elec['id'] = ''.join(
         random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(32))
     elec['voted'] = []
-    elec['options'] = list(map(lambda x: {'name': x, 'votes': 0}, data.get('options')))
+    elec['options'] = [{'index': i, 'name': x, 'votes': 0} for i, x in enumerate(data.get('options'))]
     elec['pointer'] = 0
     elec['hash'] = ''
 
@@ -67,6 +67,11 @@ def get_qrcode():
         return send_file(qrcode(sha.hexdigest(), mode='raw'), mimetype='image/png')
     else:
         return 'incorrect parameters'
+
+
+@app.route('/options', methods=['POST'])
+def options():
+    return jsonify(app.blocks[-1]['options'])
 
 
 # expect 'token' (string) and 'option' (int) as parameter
