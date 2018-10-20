@@ -1,0 +1,52 @@
+.Poll {
+    display: flex;
+    flex-flow: row wrap;
+    position: relative;
+    margin: 16px -8px;
+}
+.Poll__Option {
+    max-width: calc(33.33% - 72px);
+    flex: 1 0 calc(33.333% - 20px);
+    flex-wrap: wrap;
+    display: flex;
+    background-color: #FFFFFF;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.01), 
+                0 8px 32px -8px rgba(0,0,0,0.08);
+    border-radius: 4px;
+    padding: 24px;
+    margin: 8px;
+    transition: 0.15s;
+    cursor: pointer;
+    &:hover {
+        background-color: #f8f8f8;
+        box-shadow: 0 0 0 1px #305ED4, 
+                0 8px 32px -8px rgba(0,0,0,0.1);
+    }
+    &:active, 
+    &:focus {
+        background-color: #305ED4 !important;
+        box-shadow: 0 0 0 5px #305ED433, 
+                0 8px 32px -8px rgba(0,0,0,0.1);
+        * {
+            color: #fff;
+        }
+    }
+}
+.Poll__Avatar{
+    width: 56px;
+    height: 56px;
+    background: #ccc;
+    border-radius: 56px;
+    display: block;
+    margin-right: 1em;
+}
+.Candidate__Label {
+    text-transform: uppercase;
+    color: rgba(10, 11, 14, .66);
+    font-size: .875rem;
+    font-weight: bold;
+    margin-top: 4px;
+}
+.Candidate__Name {
+    margin: 6px 0;
+}

@@ -1,0 +1,12 @@
+.QR__Container {
+    display: flex;
+}
+.QR__Placeholder {
+    background: #eee;
+    flex: 1;
+    height: 320px;
+}
+.QR__Instructions {
+    flex: 1;
+    margin-left: 32px;
+}

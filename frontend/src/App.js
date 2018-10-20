@@ -2,6 +2,11 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import CreateElection from "./components/CreateElection";
 import ManagedElections from "./components/ManagedElections";
+import Footer from "./components/Footer/FooterContainer";
+import Routes from "./ Routes";
+import './normalize.css';
+import './App.scss';
+import CandidateInput from "./components/CandidateInput";
 
 class App extends Component {
   constructor(props) {
@@ -10,7 +15,8 @@ class App extends Component {
     this.state = {
       election: {
         title: "Placeholder",
-        candidates: ["A", "B", "C"],
+        candidates: ["Bonadio Mclean", "Tiffney Bickis", "Grogin Dubie"],
+        candidatesB: ["Peter Duke", "Nope Nobel", "Sandra Bollock", "Román Luz", "Arturo IV"],
         deadline: new Date(2019, 1, 1)
       }
     };
@@ -30,57 +36,32 @@ class App extends Component {
       </div>
     );
 
-    const Topics = ({ match }) => (
-      <div>
-        <h2>Topics</h2>
-        <ul>
-          <li>
-            <Link to={`${match.url}/rendering`}>Rendering with React</Link>
-          </li>
-          <li>
-            <Link to={`${match.url}/components`}>Components</Link>
-          </li>
-          <li>
-            <Link to={`${match.url}/props-v-state`}>Props v. State</Link>
-          </li>
-        </ul>
-
-        <Route path={`${match.path}/:topicId`} component={Topic} />
-        <Route
-          exact
-          path={match.path}
-          render={() => <h3>Please select a topic.</h3>}
-        />
-      </div>
-    );
-
-    const Topic = ({ match }) => (
-      <div>
-        <h3>{match.params.topicId}</h3>
-      </div>
-    );
     const { election } = this.state;
-
-    return (
+    return(
       <Router>
-        <div>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/create">Create Election</Link>
-            </li>
-            <li>
-              <Link to="/current">Current Election</Link>
-            </li>
-            <li>
-              <Link to="/example">Tut</Link>
-            </li>
-          </ul>
-
-          <hr />
-
+        <>
+        <div className="Header">
+          <div className="Header__Upper">
+            <div className="Header__Nav">
+              <div className="Header__Logo">
+                Decent
+              </div>
+              <div className="Header__Link">
+                <Link to="/">Home</Link>
+              </div>
+              <div className="Header__Link">
+                <Link to="/create">Create Election</Link>
+              </div>
+              <div className="Header__Link">
+                <Link to="/current">Current Election</Link>
+              </div>
+            </div>
+          </div>
+          <div className="Header__Lower">
+            <h2 className="Header__Title">{election.title}</h2>
+          </div>
+        </div>
+        <div className="Main">
           <Route exact path="/" component={Home} />
           <Route
             path="/create"
@@ -96,10 +77,23 @@ class App extends Component {
               />
             )}
           />
-          <Route path="/example" component={Topics} />
-        </div>
+          <Route path="/options" 
+              render={() => (
+                <CandidateInput
+                  component={CandidateInput} 
+                  title={election.title}
+                  candidates={election.candidates}
+                  candidatesB={election.candidatesB}
+                 deadline={election.deadline} />
+                )}
+            />
+          </div>
+          <Footer />
+        </>
       </Router>
     );
   }
 }
+
+
 export default App;

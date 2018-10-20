@@ -1,0 +1,98 @@
+// App.scss
+
+// 0. UI booting
+@import './components/UI/Vars.scss';
+@import './components/UI/Base.scss';
+@import './components/UI/Fonts.scss';
+
+// Scaffo
+html {
+    background: #f2f2f2;
+}
+.Main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding-bottom: 96px;
+}
+.Page__Title {
+    margin-top: 1.67em;
+    margin-bottom: 0.33em;
+    position: relative;
+    display: block;
+    .Page__Title--deadline {
+        float: right;
+        position: absolute;
+        font-size: .67em;
+        margin-top: .51em;
+        line-height: 1;
+        right: 0;
+        opacity: .7;
+    }
+}
+.Page__Subtitle {
+    margin: 0;
+}
+.Section__Header {
+    font-size: 16px;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: rgba(48,94,212,1);
+    padding-top: 1.7em;
+    padding-bottom: 0.5em;
+    margin-bottom: 0.67em;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+// Temp
+.Header {
+    display: block;
+    left: 0;
+    position: relative;
+    top: 0;
+}
+.Header__Upper {
+    background: #000;
+    height: 56px;
+    top: 0;
+    z-index: 99;
+    position: fixed;
+    width: 100%;
+    .Header__Nav {
+        align-items: center;
+        display: flex; 
+        height: 56px;
+        margin-left: 48px;
+        margin-right: 48px;
+        max-width: 960px;
+    }
+    .Header__Link,
+    .Header__Logo {
+        color: #fff;
+        font-weight: 600;
+        margin: 0 1vw;
+        & > a {
+            color: #fff;
+            text-decoration: none;
+        }
+    }
+    .Header__Logo {
+        opacity: .66;
+    }
+}
+.Header__Lower {
+    align-items: center;
+    background: rgba(48,94,212,1);
+    display: flex;
+    height: 56px;
+    padding-left: 48px;
+    padding-right: 48px;
+    margin-top: 56px;
+    .Header__Title {
+        color: #fff;
+        line-height: 1;
+        margin-top: -4px;
+        margin-bottom: 0;
+        margin-left: 1vw;
+        font-size: 1em;
+    }
+}
