@@ -4,7 +4,7 @@ import json
 import random
 import string
 
-from config import SALT
+from config import SALT, SALT_QR
 
 
 def random_string():
@@ -19,7 +19,9 @@ def generate_token(election, user):
 
 def validate_token(election, token):
     for user in election.get('users'):
-        if user.get('id') not in election['voted'] and generate_token(election, user) == token:
+        sha = hashlib.sha1()
+        sha.update("{}{}{}{}".format(SALT_QR, user.get('email'), user.get('id'), election['id']).encode('utf-8'))
+        if user.get('id') not in election['voted'] and sha.hexdigest() == token:
             return user.get('id')
     return None
 
