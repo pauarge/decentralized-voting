@@ -2,10 +2,11 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import CreateElection from "./components/CreateElection";
 import ManagedElections from "./components/ManagedElections";
-import HeaderContainer from "./components/Header/HeaderContainer";
+import Footer from "./components/Footer/FooterContainer";
 import Routes from "./ Routes";
 import './normalize.css';
 import './App.scss';
+import CandidateInput from "./components/CandidateInput";
 
 class App extends Component {
   constructor(props) {
@@ -14,7 +15,8 @@ class App extends Component {
     this.state = {
       election: {
         title: "Placeholder",
-        candidates: ["A", "B", "C"],
+        candidates: ["Bonadio Mclean", "Tiffney Bickis", "Grogin Dubie"],
+        candidatesB: ["Peter Duke", "Nope Nobel", "Sandra Bollock", "Román Luz", "Arturo IV"],
         deadline: new Date(2019, 1, 1)
       }
     };
@@ -28,7 +30,6 @@ class App extends Component {
     );
 
     const { election } = this.state;
-
     return(
       <Router>
         <>
@@ -36,7 +37,7 @@ class App extends Component {
           <div className="Header__Upper">
             <div className="Header__Nav">
               <div className="Header__Logo">
-                DeCent
+                Decent
               </div>
               <div className="Header__Link">
                 <Link to="/">Home</Link>
@@ -66,7 +67,18 @@ class App extends Component {
               />
             )}
           />
-        </div>
+          <Route path="/options" 
+              render={() => (
+                <CandidateInput
+                  component={CandidateInput} 
+                  title={election.title}
+                  candidates={election.candidates}
+                  candidatesB={election.candidatesB}
+                 deadline={election.deadline} />
+                )}
+            />
+          </div>
+          <Footer />
         </>
       </Router>
     );
