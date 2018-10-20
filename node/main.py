@@ -12,7 +12,7 @@ import os
 
 from config import SALT_QR, PADDING_CHAR
 from cryptography import generate_secret_key_for_AES_cipher, encrypt_message, decrypt_message
-from send_email import send_register_email
+from send_email import send_register_email, send_verification_email
 from voting import validate_token, generate_token, broadcast_blocks, random_string
 from model import Model
 
@@ -139,6 +139,7 @@ def vote():
 
                 app.blocks.append(new_block)
                 app.model.save(app.blocks)
+                send_verification_email(app.blocks[-1], request.headers.get('host'), result_hash)
                 broadcast_blocks(app.blocks, app.known_hosts)
                 return jsonify({'verification': result_hash})
 
