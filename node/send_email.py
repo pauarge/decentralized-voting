@@ -8,7 +8,7 @@ from voting import generate_token
 def send_email(election, url):
     # Replace sender@example.com with your "From" address.
     # This address must be verified with Amazon SES.
-    SENDER = "Voting System <pau.argelaguet@hotmail.com>"
+    SENDER = "Voting System <votingsystem@protonmail.com>"
 
     # The subject line for the email.
     SUBJECT = election.get('name')
