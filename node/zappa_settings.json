@@ -9,6 +9,9 @@
             "Effect": "Allow",
             "Action": ["ses:*"],
             "Resource": "*"
-        }]
+        }],
+        "environment_variables": {
+            "SERVER_ID": "1"
+        }
     }
 }

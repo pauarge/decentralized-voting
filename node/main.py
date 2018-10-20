@@ -1,22 +1,24 @@
 from flask import Flask, request, jsonify, render_template, send_file
 from flask_cors import CORS
 from flask_qrcode import QRcode
-import random
-import string
 import time
 import copy
 import json
 import hashlib
+import os
 
-from config import SALT_QR
+from config import SALT_QR, PADDING_CHAR
+from cryptography import generate_secret_key_for_AES_cipher, encrypt_message
 from send_email import send_register_email
-from voting import validate_token, register_vote, generate_token, broadcast_blocks
+from voting import validate_token, register_vote, generate_token, broadcast_blocks, random_string
 from model import Model
 
 app = Flask(__name__)
 CORS(app)
 qrcode = QRcode(app)
 
+app.server_id = int(os.environ.get('SERVER_ID', '1'))
+app.secret_key = generate_secret_key_for_AES_cipher()
 app.blocks = []
 app.model = Model()
 app.known_hosts = []
@@ -30,15 +32,16 @@ def election():
             and 'options' in data:
         if len(app.blocks) < 1:
             elec = data
-            elec['id'] = ''.join(
-                random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(32))
+            elec['id'] = random_string()
             elec['voted'] = []
-            elec['options'] = [{'index': i, 'name': x, 'votes': 0} for i, x in enumerate(data.get('options'))]
+            elec['options'] = [{'index': i, 'name': x} for i, x in enumerate(data.get('options'))]
             elec['pointer'] = 0
             elec['hash'] = ''
+            elec['owner'] = app.server_id
+            elec['results'] = encrypt_message('', app.secret_key, PADDING_CHAR).decode('utf-8')
 
             app.blocks.append(elec)
-            app.model.save(app.blocks)
+            app.model.save(app.blocks, app.secret_key)
             broadcast_blocks(app.blocks, app.known_hosts)
             send_register_email(elec, request.headers.get('host'))
             return jsonify(app.blocks)
@@ -124,10 +127,12 @@ def vote():
     return jsonify({'error': 'invalid parameters'}), 400
 
 
-@app.route("/proof", methods=['POST'])
+@app.route("/proof", methods=['GET'])
 def proof():
-    token = request.form.get('token')
-    return send_file(qrcode(token, mode='raw'), mimetype='image/png')
+    if 'token' in request.args:
+        token = request.args.get('token')
+        return send_file(qrcode(token, mode='raw'), mimetype='image/png')
+    return jsonify({'error': 'invalid parameters'}), 400
 
 
 @app.route('/results', methods=['POST'])
