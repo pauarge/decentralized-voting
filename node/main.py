@@ -73,7 +73,7 @@ def get_qrcode():
 @app.route('/vote', methods=['POST'])
 def vote():
     if app.blocks[-1]['expiration'] < time.time():
-        return 'election expired'
+        return jsonify({'error': 'poll expired'})
 
     data = request.get_json()
     user = validate_token(data.get('token'), app.blocks[-1])
@@ -86,12 +86,13 @@ def vote():
         sha.update(json.dumps(app.blocks[-1]))
         new_block['hash'] = sha.hexdigest()
         result = register_vote(data.get('option'), user, new_block)
-        app.blocks.append(new_block)
-        app.model.save(app.blocks)
-        broadcast_blocks(app.blocks, known_hosts)
-        return jsonify(app.blocks)
-    else:
-        return "no user"
+        if result:
+            app.blocks.append(new_block)
+            app.model.save(app.blocks)
+            broadcast_blocks(app.blocks, known_hosts)
+            return jsonify({'blocks': app.blocks, 'verification': result})
+
+    return jsonify({'error': 'vote not registered'})
 
 
 @app.route("/proof", methods=['POST'])
