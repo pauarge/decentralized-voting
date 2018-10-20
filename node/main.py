@@ -20,8 +20,6 @@ known_hosts = []
 
 scheduler.start()
 
-global current_election
-
 
 @app.route("/discover")
 def discover():
@@ -32,10 +30,9 @@ def discover():
 def election():
     data = request.get_json()
     # if not app.current_election:
-    election_id = ''.join(
-        random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(32))
     app.current_election = data
-    app.current_election['id'] = election_id
+    app.current_election['id'] = ''.join(
+        random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(32))
     app.current_election['voted'] = []
     app.current_election['options'] = list(map(lambda x: {'name': x, 'votes': 0}, data.get('options')))
 
@@ -52,7 +49,6 @@ def verify():
 
 @app.route('/qrcode', methods=['POST'])
 def get_qrcode():
-    # please get /qrcode?data=<qrcode_data>
     email = request.form.get('email')
     id = request.form.get('id')
     token = request.form.get('token')
@@ -72,12 +68,12 @@ def vote():
         return "no current election"
 
     data = request.get_json()
-    user = validate_token(data.get('token'), current_election)
+    user = validate_token(data.get('token'), app.current_election)
 
     if user:
         app.current_election['voted'].append(user)
-        result = register_vote(data.get('option'), user, current_election)
-        app.model.save(current_election)
+        result = register_vote(data.get('option'), user, app.current_election)
+        app.model.save(app.current_election)
         return jsonify({'current_election': app.current_election})
     else:
         return "no user"
