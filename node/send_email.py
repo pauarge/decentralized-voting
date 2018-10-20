@@ -1,20 +1,15 @@
 from botocore.exceptions import ClientError
 import boto3
 
-from config import AWS_REGION, CHARSET
+from config import AWS_REGION, CHARSET, SENDER
 from voting import generate_token
 
+BODY_TEXT = "Please, visualize as HTML\r\n"
 
-def send_email(election, url):
-    # Replace sender@example.com with your "From" address.
-    # This address must be verified with Amazon SES.
-    SENDER = "Voting System <votingsystem@protonmail.com>"
 
+def send_register_email(election, url):
     # The subject line for the email.
     SUBJECT = election.get('name')
-
-    # The email body for recipients with non-HTML email clients.
-    BODY_TEXT = "Please, visualize as HTML\r\n"
 
     # Create a new SES resource and specify a region.
     client = boto3.client('ses', region_name=AWS_REGION)
@@ -22,7 +17,7 @@ def send_email(election, url):
     # Try to send the email.
     for user in election.get('users'):
         # The HTML body of the email.
-        BODY_HTML = """<html>
+        body_html = """<html>
                 <head></head>
                 <body>
                 <h1>{}</h1>
@@ -34,15 +29,63 @@ def send_email(election, url):
             # Provide the contents of the email.
             response = client.send_email(
                 Destination={
-                    'ToAddresses': [
-                        user.get('email'),
-                    ],
+                    'ToAddresses': [user.get('email')],
                 },
                 Message={
                     'Body': {
                         'Html': {
                             'Charset': CHARSET,
-                            'Data': BODY_HTML,
+                            'Data': body_html,
+                        },
+                        'Text': {
+                            'Charset': CHARSET,
+                            'Data': BODY_TEXT,
+                        },
+                    },
+                    'Subject': {
+                        'Charset': CHARSET,
+                        'Data': SUBJECT,
+                    },
+                },
+                Source=SENDER,
+            )
+
+        except ClientError as e:
+            print(e.response['Error']['Message'])
+        else:
+            print("Email sent! Message ID:"),
+            print(response['MessageId'])
+
+
+def send_verification_email(election, url, token):
+    # The subject line for the email.
+    SUBJECT = '{} - Voting Verification'.format(election.get('name'))
+
+    # Create a new SES resource and specify a region.
+    client = boto3.client('ses', region_name=AWS_REGION)
+
+    # Try to send the email.
+    for user in election.get('users'):
+        # The HTML body of the email.
+        body_html = """<html>
+                <head></head>
+                <body>
+                <h1>{}</h1>
+                <p>You can verify your vote here: <a href="http://{}/proof?token={}">Voting link</a>.</p>
+                </body>
+                </html>""".format(election.get('name'), url, token)
+
+        try:
+            # Provide the contents of the email.
+            response = client.send_email(
+                Destination={
+                    'ToAddresses': [user.get('email')],
+                },
+                Message={
+                    'Body': {
+                        'Html': {
+                            'Charset': CHARSET,
+                            'Data': body_html,
                         },
                         'Text': {
                             'Charset': CHARSET,

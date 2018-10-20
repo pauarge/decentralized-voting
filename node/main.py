@@ -10,7 +10,7 @@ import copy
 import json
 
 from config import SALT_QR
-from send_email import send_email
+from send_email import send_register_email
 from voting import validate_token, register_vote, generate_token, broadcast_blocks
 from model import Model
 
@@ -41,7 +41,7 @@ def election():
     app.blocks.append(elec)
     app.model.save(app.blocks)
     broadcast_blocks(app.blocks, known_hosts)
-    send_email(elec, request.headers.get('host'))
+    send_register_email(elec, request.headers.get('host'))
     return jsonify(app.blocks)
 
 
@@ -81,7 +81,7 @@ def vote():
         return jsonify({'error': 'poll expired'})
 
     data = request.get_json()
-    user = validate_token(data.get('token'), app.blocks[-1])
+    user = validate_token(data.get('token'), app.blocks[-1], data.blocks[-1]['voted'])
 
     if user:
         new_block = copy.copy(app.blocks[-1])
@@ -102,7 +102,8 @@ def vote():
 
 @app.route("/proof", methods=['POST'])
 def proof():
-    return "voting proof"
+    token = request.form.get('token')
+    return send_file(qrcode(token, mode='raw'), mimetype='image/png')
 
 
 @app.route('/results', methods=['POST'])
