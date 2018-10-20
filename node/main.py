@@ -124,10 +124,12 @@ def vote():
     return jsonify({'error': 'invalid parameters'}), 400
 
 
-@app.route("/proof", methods=['POST'])
+@app.route("/proof", methods=['GET'])
 def proof():
-    token = request.form.get('token')
-    return send_file(qrcode(token, mode='raw'), mimetype='image/png')
+    if 'token' in request.args:
+        token = request.args.get('token')
+        return send_file(qrcode(token, mode='raw'), mimetype='image/png')
+    return jsonify({'error': 'invalid parameters'}), 400
 
 
 @app.route('/results', methods=['POST'])
