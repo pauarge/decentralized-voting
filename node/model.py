@@ -19,20 +19,12 @@ class Model:
                         'AttributeName': 'id',
                         'KeyType': 'HASH'
                     },
-                    {
-                        'AttributeName': 'content',
-                        'KeyType': 'RANGE'
-                    }
                 ],
                 AttributeDefinitions=[
                     {
                         'AttributeName': 'id',
                         'AttributeType': 'S'
                     },
-                    {
-                        'AttributeName': 'content',
-                        'AttributeType': 'S'
-                    }
 
                 ],
                 ProvisionedThroughput={
