@@ -1,5 +1,6 @@
 import hashlib
 
+import requests
 from flask import Flask, request, jsonify, render_template, send_file
 from flask_cors import CORS
 from flask_qrcode import QRcode
@@ -11,7 +12,7 @@ import json
 
 from config import SALT_QR
 from send_email import send_email
-from voting import validate_token, register_vote, generate_token
+from voting import validate_token, register_vote, generate_token, broadcast_blocks
 from model import Model
 
 app = Flask(__name__)
@@ -40,6 +41,7 @@ def election():
 
     app.blocks.append(elec)
     app.model.save(app.blocks)
+    broadcast_blocks(app.blocks, known_hosts)
     send_email(elec, request.headers.get('host'))
     return jsonify(app.blocks)
 
@@ -83,6 +85,7 @@ def vote():
         result = register_vote(data.get('option'), user, new_block)
         app.blocks.append(new_block)
         app.model.save(app.blocks)
+        broadcast_blocks(app.blocks, known_hosts)
         return jsonify(app.blocks)
     else:
         return "no user"
@@ -108,5 +111,4 @@ def update():
     if local_pointer < data['pointer']:
         app.current_election = data
     else:
-        for host in known_hosts:
-            pass
+        broadcast_blocks(app.blocks, known_hosts)
