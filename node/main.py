@@ -7,9 +7,10 @@ import random
 import string
 import time
 
+from config import SALT_QR
 from cron import scheduler
 from send_email import send_email
-from voting import validate_token, register_vote
+from voting import validate_token, register_vote, generate_token
 from model import Model
 
 app = Flask(__name__)
@@ -54,12 +55,16 @@ def get_qrcode():
     email = request.form.get('email')
     id = request.form.get('id')
     token = request.form.get('token')
+    user = {
+        'email': email,
+        'id': id
+    }
 
-    sha_1 = hashlib.sha1()
-    sha_1.update("{}{}".format(email, id).encode('utf-8'))
+    sha = hashlib.sha512()
+    sha.update("{}{}{}{}".format(SALT_QR, email, id, app.current_election['id']).encode('utf-8'))
 
-    if sha_1.hexdigest() == token:
-        return send_file(qrcode(token, mode='raw'), mimetype='image/png')
+    if generate_token(app.current_election, user) == token:
+        return send_file(qrcode(sha.hexdigest(), mode='raw'), mimetype='image/png')
     else:
         return 'incorrect parameters'
 
