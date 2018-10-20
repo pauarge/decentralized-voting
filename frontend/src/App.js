@@ -53,16 +53,16 @@ class App extends Component {
       voters
     });
 
+    console.log(voters.voters);
+    // console.log([{ email: "bb816@ic.ac.uk", id: "111" }]);
+
     fetch("http://127.0.0.1:5000/election", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        users: voters.map(voter => ({
-          id: voter.id,
-          email: voter.email
-        })),
+        users: voters.voters,
         name: election.title,
         description: election.description,
         expiration: 1540015431,

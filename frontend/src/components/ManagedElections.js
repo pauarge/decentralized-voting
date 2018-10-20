@@ -69,7 +69,7 @@ export default class ManagedElections extends Component {
           </div>
         </Box>
         {this.state.result === "test" ? (
-          <Redirect to="/options" />
+          <Redirect to="/" />
         ) : (
           <Footer
             from="/confirm"
