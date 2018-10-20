@@ -1,4 +1,6 @@
+import requests
 import hashlib
+import json
 
 from config import SALT
 
@@ -24,3 +26,8 @@ def register_vote(option, user, election):
             sha.update("{}{}".format(election['id'], user))
             return sha.hexdigest()
     return None
+
+
+def broadcast_blocks(blocks, known_hosts):
+    for host in known_hosts:
+        requests.post(host, json.dumps(blocks))
