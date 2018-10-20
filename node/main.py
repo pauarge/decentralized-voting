@@ -79,7 +79,7 @@ def get_qrcode():
         sha.update("{}{}{}{}".format(SALT_QR, email, id, app.blocks[-1]['id']).encode('utf-8'))
 
         if generate_token(app.blocks[-1], user) == token:
-            return send_file(qrcode(sha.hexdigest(), mode='base64'), mimetype='image/png')
+            return send_file(qrcode(sha.hexdigest(), mode='raw'), mimetype='image/png')
 
     return jsonify({'error': 'invalid parameters'}), 400
 
