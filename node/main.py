@@ -1,6 +1,9 @@
+from collections import defaultdict
+
 from flask import Flask, request, jsonify, render_template, send_file
 from flask_cors import CORS
 from flask_qrcode import QRcode
+import requests
 import time
 import copy
 import json
@@ -8,7 +11,7 @@ import hashlib
 import os
 
 from config import SALT_QR, PADDING_CHAR
-from cryptography import generate_secret_key_for_AES_cipher, encrypt_message
+from cryptography import generate_secret_key_for_AES_cipher, encrypt_message, decrypt_message
 from send_email import send_register_email
 from voting import validate_token, generate_token, broadcast_blocks, random_string
 from model import Model
@@ -151,10 +154,31 @@ def proof():
 def results():
     if app.blocks[-1]['expiration'] > time.time():
         return 'results not available yet'
+
+    current_results = defaultdict(int)
+    reversed_blocks = reversed(app.blocks)
+    for b in reversed_blocks:
+        payload = b['payload']
+        if b['owner'] == app.server_id:
+            res = decrypt_message(payload, app.secret_key, PADDING_CHAR)
+        else:
+            res = requests.post(app.known_hosts[b['owner']], {'payload': payload}).json().get('result')
+        option = res.split(',,,')[1]
+        current_results[option] += 1
+
     return jsonify({
         'options': app.blocks[-1]['options'],
-        'results': []
+        'results': current_results
     })
+
+
+@app.route('/decrypt', methods=['POST'])
+def decrypt():
+    data = request.get_json()
+    if data and 'payload' in data:
+        return jsonify({'result': decrypt_message(data.get('payload'), app.secret_key, PADDING_CHAR)})
+
+    return jsonify({'error': 'invalid parameters'}), 400
 
 
 @app.route('/update', methods=['POST'])
