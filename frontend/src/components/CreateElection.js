@@ -1,12 +1,21 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { Redirect } from "react-router-dom";
 
 export default class CreateElection extends Component {
-  state = {
-    title: "",
-    candidates: [{ name: "" }],
-    deadline: null
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      title: "",
+      candidates: [{ name: "" }],
+      deadline: null
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.addCandidate = this.addCandidate.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
 
   handleChange = e => {
     if (["name"].includes(e.target.className)) {
@@ -29,11 +38,17 @@ export default class CreateElection extends Component {
   handleSubmit = e => {
     e.preventDefault();
     this.props.onSubmit(this.state);
+    this.setState({
+      submitted: true
+    });
   };
 
   render() {
     let { title, candidates } = this.state;
-    return (
+
+    const component = this.state.submitted ? (
+      <Redirect to="/add-voters" />
+    ) : (
       <form onSubmit={this.handleSubmit} onChange={this.handleChange}>
         <label htmlFor="title">Title</label>
         <input type="text" name="title" id="title" value={title} />
@@ -58,6 +73,8 @@ export default class CreateElection extends Component {
         <input type="submit" value="Submit" />
       </form>
     );
+
+    return component;
   }
 }
 
