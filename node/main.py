@@ -1,8 +1,6 @@
 from flask import Flask, request, jsonify, render_template, send_file
 from flask_cors import CORS
 from flask_qrcode import QRcode
-from Crypto.Cipher import AES
-from Crypto import Random
 import time
 import copy
 import json
@@ -33,16 +31,14 @@ def election():
     if data and 'users' in data and 'name' in data and 'description' in data and 'expiration' in data \
             and 'options' in data:
         if len(app.blocks) < 1:
-            payload = json.dumps({
-                'voted': [],
-                'options': [{'index': i, 'name': x, 'votes': 0} for i, x in enumerate(data.get('options'))]
-            })
-
             elec = data
             elec['id'] = random_string()
+            elec['voted'] = []
+            elec['options'] = [{'index': i, 'name': x} for i, x in enumerate(data.get('options'))]
             elec['pointer'] = 0
             elec['hash'] = ''
-            elec['payload'] = encrypt_message(payload, app.secret_key, PADDING_CHAR).decode('utf-8')
+            elec['owner'] = app.server_id
+            elec['results'] = encrypt_message('', app.secret_key, PADDING_CHAR).decode('utf-8')
 
             app.blocks.append(elec)
             app.model.save(app.blocks, app.secret_key)
