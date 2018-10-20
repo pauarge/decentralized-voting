@@ -102,8 +102,8 @@ def vote():
     if len(app.blocks) < 1:
         return jsonify({'error': 'no ongoing election'}), 400
 
-    if app.blocks[-1]['expiration'] < time.time():
-        return jsonify({'error': 'election expired'}), 400
+    # if app.blocks[-1]['expiration'] < time.time():
+        # return jsonify({'error': 'election expired'}), 400
 
     data = request.get_json()
 
@@ -129,12 +129,12 @@ def vote():
                         app.secret_key,
                         PADDING_CHAR).decode('utf-8')
                     sha = hashlib.sha1()
-                    sha.update("{}{}".format(app.blocks[-1]['id'], user))
+                    sha.update("{}{}".format(app.blocks[-1]['id'], user).encode('utf-8'))
                     result_hash = sha.hexdigest()
 
             if result_hash:
                 sha = hashlib.sha1()
-                sha.update(json.dumps(app.blocks[-1]))
+                sha.update(json.dumps(app.blocks[-1]).encode('utf-8'))
                 new_block['hash'] = sha.hexdigest()
 
                 app.blocks.append(new_block)

@@ -20,8 +20,11 @@ class App extends Component {
         candidates: [],
         deadline: new Date(2019, 1, 1)
       },
-      voters: []
+      voters: [],
+      voteIndex: 1
     };
+
+    this.electCandidate = this.electCandidate.bind(this);
     this.storeElection = this.storeElection.bind(this);
     this.storeVoters = this.storeVoters.bind(this);
     this.fetchCurrentElection = this.fetchCurrentElection.bind(this);
@@ -72,6 +75,10 @@ class App extends Component {
     });
   }
 
+  electCandidate(voteIndex) {
+    this.setState({ voteIndex });
+  }
+
   render() {
     const Home = () => (
       <div>
@@ -79,7 +86,7 @@ class App extends Component {
       </div>
     );
 
-    const { election } = this.state;
+    const { election, voteIndex } = this.state;
     return (
       <Router>
         <>
@@ -117,6 +124,7 @@ class App extends Component {
               render={() => (
                 <ManagedElections
                   title={election.title}
+                  selectedIndex={voteIndex}
                   candidates={election.candidates}
                   deadline={new Date(2019, 0, 1)}
                 />
@@ -127,14 +135,22 @@ class App extends Component {
               render={() => (
                 <CandidateInput
                   component={CandidateInput}
+                  onSelect={this.electCandidate}
                   title={election.title}
                   candidates={election.candidates}
-                  candidatesB={election.candidatesB}
                   deadline={election.deadline}
                 />
               )}
             />
-            <Route path="/confirm" component={VoteConfirmation} />
+            <Route
+              path="/confirm"
+              render={() => (
+                <VoteConfirmation
+                  voteName={election.candidates[voteIndex].name}
+                  electionTitle={election.description}
+                />
+              )}
+            />
           </div>
         </>
       </Router>

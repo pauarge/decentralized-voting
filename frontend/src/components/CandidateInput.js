@@ -10,7 +10,7 @@ export default class Candid0ateInput extends Component {
     super(props);
 
     this.state = {
-      selected: 1
+      selected: -1
     };
 
     this.selectCandidate = this.selectCandidate.bind(this);
@@ -18,11 +18,11 @@ export default class Candid0ateInput extends Component {
 
   selectCandidate(index) {
     console.log(index);
+    this.props.onSelect(index);
     this.setState({ selected: index });
   }
 
   render() {
-    console.log(this.props.candidates);
     return (
       <>
         <h1 className="Page__Title">Select your options</h1>
@@ -44,6 +44,7 @@ export default class Candid0ateInput extends Component {
 
         <Footer
           from="/add-voters"
+          disabledTo={this.state.selected === -1}
           fromLabel="Back"
           to="/confirm"
           toLabel="Next"
@@ -52,3 +53,7 @@ export default class Candid0ateInput extends Component {
     );
   }
 }
+
+Candid0ateInput.propTypes = {
+  onSelect: PropTypes.func.isRequired
+};

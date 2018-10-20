@@ -27,6 +27,18 @@ export default class ManagedElections extends Component {
         disabledTo: false
       });
       console.log(result);
+      console.log(this.props.selectedIndex);
+
+      fetch("http://127.0.0.1:5000/vote", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          token: result,
+          option: this.props.selectedIndex
+        })
+      }).then(result => console.log(result));
     }
     // Make vote api call
   }
@@ -34,7 +46,6 @@ export default class ManagedElections extends Component {
   handleError(err) {
     console.error(err);
   }
-
   render() {
     const deadlineDate = this.props.deadline.toLocaleDateString();
     const previewStyle = {
@@ -68,7 +79,7 @@ export default class ManagedElections extends Component {
             </div>
           </div>
         </Box>
-        {this.state.result === "test" ? (
+        {this.state.result ? (
           <Redirect to="/" />
         ) : (
           <Footer
@@ -87,5 +98,6 @@ export default class ManagedElections extends Component {
 ManagedElections.propTypes = {
   title: PropTypes.string.isRequired,
   candidates: PropTypes.array.isRequired,
-  deadline: PropTypes.instanceOf(Date).isRequired
+  deadline: PropTypes.instanceOf(Date).isRequired,
+  selectedIndex: PropTypes.number.isRequired
 };
