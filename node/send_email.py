@@ -6,12 +6,12 @@ from config import AWS_REGION, CHARSET, SENDER
 from voting import generate_token
 
 BODY_TEXT = "Please, visualize as HTML\r\n"
-REMOTE = os.environ.get('LOCAL_DYNAMO', '0') == '1'
+REMOTE = os.environ.get('LOCAL_DYNAMO', '0') == '0'
 
 
 def send_register_email(election, url):
     if REMOTE:
-        url += '/dev/'
+        url += '/dev'
 
     # The subject line for the email.
     SUBJECT = election.get('name')
@@ -64,7 +64,7 @@ def send_register_email(election, url):
 
 def send_verification_email(election, url, token):
     if REMOTE:
-        url += '/dev/'
+        url += '/dev'
 
     # The subject line for the email.
     SUBJECT = '{} - Voting Verification'.format(election.get('name'))
