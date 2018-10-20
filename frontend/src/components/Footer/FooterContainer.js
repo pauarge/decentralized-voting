@@ -17,17 +17,19 @@ export default class Footer extends Component {
           >
             {this.props.fromLabel}
           </LinkButton>
-          <LinkButton
-            disabled={this.props.disabled}
-            to={this.props.to}
-            className={
-              this.props.disabledTo
-                ? "Button Button__Disabled Button__Right Button__Next"
-                : "Button Button__Green Button__Right Button__Next"
-            }
-          >
-            {this.props.toLabel}
-          </LinkButton>
+          {this.props.to ? (
+            <LinkButton
+              disabled={this.props.disabled}
+              to={this.props.to}
+              className={
+                this.props.disabledTo
+                  ? "Button Button__Disabled Button__Right Button__Next"
+                  : "Button Button__Green Button__Right Button__Next"
+              }
+            >
+              {this.props.toLabel}
+            </LinkButton>
+          ) : null}
         </div>
       </div>
     );
@@ -35,6 +37,6 @@ export default class Footer extends Component {
 }
 
 Footer.propTypes = {
-  to: PropTypes.string.isRequired,
+  to: PropTypes.string,
   disabledTo: PropTypes.bool.isRequired
 };

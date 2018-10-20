@@ -8,6 +8,8 @@ import "./normalize.css";
 import "./App.scss";
 import CandidateInput from "./components/CandidateInput";
 import AddVoters from "./components/AddVoters";
+import { ErrorPage } from "./components/ErrorPage";
+import SuccessPage from "./components/SuccessPage";
 
 class App extends Component {
   constructor(props) {
@@ -119,6 +121,8 @@ class App extends Component {
               path="/add-voters"
               render={() => <AddVoters onSubmit={this.storeVoters} />}
             />
+            <Route path="/qr-error" render={() => <ErrorPage />} />
+            <Route path="/qr-success" render={() => <SuccessPage />} />
             <Route
               path="/options"
               render={() => (

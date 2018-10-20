@@ -17,6 +17,15 @@ export default class ManagedElections extends Component {
     };
 
     this.handleScan = this.handleScan.bind(this);
+    this.redirectOptions = this.redirectOptions.bind(this);
+  }
+
+  redirectOptions() {
+    if (this.state.responseCode === 400) {
+      return <Redirect to="/qr-error" />;
+    } else if (this.state.responseCode === 200) {
+      return <Redirect to="/qr-success" />;
+    }
   }
 
   handleScan(result) {
@@ -24,7 +33,8 @@ export default class ManagedElections extends Component {
     if (result) {
       this.setState({
         result,
-        disabledTo: false
+        disabledTo: false,
+        responseCode: null
       });
       console.log(result);
       console.log(this.props.selectedIndex);
@@ -38,7 +48,14 @@ export default class ManagedElections extends Component {
           token: result,
           option: this.props.selectedIndex
         })
-      }).then(result => console.log(result));
+      }).then(
+        response => this.setState({ responseCode: response.status })
+        // response.status === 400 ? (
+        //   <Redirect to="/current" />
+        // ) : (
+        //   console.log("Great success")
+        // )
+      );
     }
     // Make vote api call
   }
@@ -79,17 +96,7 @@ export default class ManagedElections extends Component {
             </div>
           </div>
         </Box>
-        {this.state.result ? (
-          <Redirect to="/" />
-        ) : (
-          <Footer
-            from="/confirm"
-            fromLabel="Confirm your vote"
-            to="/options"
-            disabledTo={this.state.result !== "test"}
-            toLabel="Next"
-          />
-        )}
+        {this.redirectOptions()}
       </>
     );
   }
