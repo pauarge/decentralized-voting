@@ -6,6 +6,7 @@ import random
 import string
 
 from send_email import send_email
+from validate import validate_token
 
 app = Flask(__name__)
 app.current_election = None
@@ -13,11 +14,6 @@ qrcode = QRcode(app)
 known_hosts = []
 
 global current_election
-
-
-@app.route("/")
-def hello():
-    return "Hello World!"
 
 
 @app.route("/discover")
@@ -33,6 +29,8 @@ def election():
         random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(32))
     app.current_election = data
     app.current_election['id'] = election_id
+    app.current_election['voted'] = []
+    app.current_election['options'] = list(map(lambda x: {'name': x, 'votes': 0}, data.get('options')))
     send_email(app.current_election, request.headers.get('host'))
 
     return jsonify({'current_election': app.current_election})
@@ -60,3 +58,24 @@ def get_qrcode():
         )
     else:
         return 'incorrect parameters'
+
+
+@app.route('/vote', methods=['POST'])
+def vote():
+    if not app.current_election:
+        return "no current election"
+
+    data = request.get_json()
+    user = validate_token(data.get('token'), current_election)
+
+    if user:
+        app.current_election['voted'].append(user)
+        # Register vote
+        return jsonify({'current_election': app.current_election})
+    else:
+        return "no user"
+
+
+@app.route('/results', methods=['POST'])
+def results():
+    return 'not available yet'
