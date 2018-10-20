@@ -1,6 +1,5 @@
 import hashlib
 
-import requests
 from flask import Flask, request, jsonify, render_template, send_file
 from flask_cors import CORS
 from flask_qrcode import QRcode
@@ -72,6 +71,9 @@ def get_qrcode():
 
 @app.route('/vote', methods=['POST'])
 def vote():
+    if app.blocks[-1]['expiration'] < time.time():
+        return 'election expired'
+
     data = request.get_json()
     user = validate_token(data.get('token'), app.blocks[-1])
 
