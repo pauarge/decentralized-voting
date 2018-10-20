@@ -1,22 +1,26 @@
 from flask import Flask, request, jsonify, render_template, send_file
 from flask_cors import CORS
 from flask_qrcode import QRcode
-import random
-import string
+from Crypto.Cipher import AES
+from Crypto import Random
 import time
 import copy
 import json
 import hashlib
+import os
 
-from config import SALT_QR
+from config import SALT_QR, PADDING_CHAR
+from cryptography import generate_secret_key_for_AES_cipher, encrypt_message
 from send_email import send_register_email
-from voting import validate_token, register_vote, generate_token, broadcast_blocks
+from voting import validate_token, register_vote, generate_token, broadcast_blocks, random_string
 from model import Model
 
 app = Flask(__name__)
 CORS(app)
 qrcode = QRcode(app)
 
+app.server_id = int(os.environ.get('SERVER_ID', '1'))
+app.secret_key = generate_secret_key_for_AES_cipher()
 app.blocks = []
 app.model = Model()
 app.known_hosts = []
@@ -29,16 +33,19 @@ def election():
     if data and 'users' in data and 'name' in data and 'description' in data and 'expiration' in data \
             and 'options' in data:
         if len(app.blocks) < 1:
+            payload = json.dumps({
+                'voted': [],
+                'options': [{'index': i, 'name': x, 'votes': 0} for i, x in enumerate(data.get('options'))]
+            })
+
             elec = data
-            elec['id'] = ''.join(
-                random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(32))
-            elec['voted'] = []
-            elec['options'] = [{'index': i, 'name': x, 'votes': 0} for i, x in enumerate(data.get('options'))]
+            elec['id'] = random_string()
             elec['pointer'] = 0
             elec['hash'] = ''
+            elec['payload'] = encrypt_message(payload, app.secret_key, PADDING_CHAR).decode('utf-8')
 
             app.blocks.append(elec)
-            app.model.save(app.blocks)
+            app.model.save(app.blocks, app.secret_key)
             broadcast_blocks(app.blocks, app.known_hosts)
             send_register_email(elec, request.headers.get('host'))
             return jsonify(app.blocks)

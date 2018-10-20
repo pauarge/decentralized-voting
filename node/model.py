@@ -37,12 +37,13 @@ class Model:
         except:
             print('table already existed')
 
-    def save(self, election):
+    def save(self, election, sk):
         table = self.dynamodb.Table('elections')
         table.put_item(
             Item={
                 'id': election[0].get('id'),
                 'content': json.dumps(election),
+                'sk': sk,
             }
         )
         return True

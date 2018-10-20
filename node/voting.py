@@ -1,8 +1,14 @@
 import requests
 import hashlib
 import json
+import random
+import string
 
 from config import SALT
+
+
+def random_string():
+    return ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(32))
 
 
 def generate_token(election, user):
