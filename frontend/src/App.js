@@ -14,7 +14,6 @@ class App extends Component {
         deadline: new Date(2019, 1, 1)
       }
     };
-    this.storeElection = this.storeElection.bind(this);
   }
   storeElection(election) {
     console.log("Setting state to");
