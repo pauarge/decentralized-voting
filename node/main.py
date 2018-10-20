@@ -75,7 +75,7 @@ def get_qrcode():
         if len(app.blocks) < 1:
             return jsonify({'error': 'no ongoing election'}), 400
 
-        sha = hashlib.sha512()
+        sha = hashlib.sha256()
         sha.update("{}{}{}{}".format(SALT_QR, email, id, app.blocks[-1]['id']).encode('utf-8'))
 
         if generate_token(app.blocks[-1], user) == token:
@@ -123,12 +123,12 @@ def vote():
                         '{},,,{}'.format(new_block['results'], parsed_option),
                         app.secret_key,
                         PADDING_CHAR).decode('utf-8')
-                    sha = hashlib.sha512()
+                    sha = hashlib.sha256()
                     sha.update("{}{}".format(app.blocks[-1]['id'], user))
                     result_hash = sha.hexdigest()
 
             if result_hash:
-                sha = hashlib.sha512()
+                sha = hashlib.sha256()
                 sha.update(json.dumps(app.blocks[-1]))
                 new_block['hash'] = sha.hexdigest()
 
