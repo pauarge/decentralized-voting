@@ -9,7 +9,7 @@ export default class CreateElection extends Component {
   };
 
   handleChange = e => {
-    if (["name", "age"].includes(e.target.className)) {
+    if (["name"].includes(e.target.className)) {
       let candidates = [...this.state.candidates];
       candidates[e.target.dataset.id][
         e.target.className
