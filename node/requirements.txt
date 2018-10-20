@@ -11,6 +11,7 @@ colorama==0.3.9
 docutils==0.14
 durationpy==0.5
 Flask==1.0.2
+Flask-Cors==3.0.6
 Flask-QRcode==2.0.2
 future==0.16.0
 hjson==3.0.1

@@ -2,6 +2,7 @@ from botocore.exceptions import ClientError
 import boto3
 
 from config import AWS_REGION, CHARSET
+from voting import generate_token
 
 
 def send_email(election, url):
