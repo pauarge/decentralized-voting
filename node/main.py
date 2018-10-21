@@ -182,8 +182,9 @@ def results():
             res = decrypt_message(payload.encode('utf-8'), app.secret_key, PADDING_CHAR)
         else:
             res = requests.post(app.known_hosts[b['owner']], {'payload': payload}).json().get('result')
-        option = res.split(',,,')[1]
-        current_results[option] += 1
+        if len(res) > 1:
+            option = int(res.split(',,,')[1])
+            current_results[option] += 1
 
     return jsonify({
         'options': app.blocks[-1]['options'],

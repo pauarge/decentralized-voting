@@ -39,6 +39,6 @@ def decrypt_message(encoded_encrypted_msg, encoded_secret_key, padding_character
     # use the cipher to decrypt the encrypted message
     decrypted_msg = cipher.decrypt(encrypted_msg)
     # unpad the encrypted message
-    unpadded_private_msg = decrypted_msg.rstrip(padding_character)
+    unpadded_private_msg = decrypted_msg.decode('utf-8').rstrip(padding_character)
     # return a decrypted original private message
     return unpadded_private_msg
