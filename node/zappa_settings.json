@@ -11,7 +11,8 @@
             "Resource": "*"
         }],
         "environment_variables": {
-            "SERVER_ID": "1"
+            "SERVER_ID": "1",
+            "LOCAL_DYNAMO": "0"
         }
     }
 }

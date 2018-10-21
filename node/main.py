@@ -62,7 +62,8 @@ def election():
 
 @app.route("/verify", methods=['GET'])
 def verify():
-    return render_template('verify.html', token=request.args.get('token'))
+    u = '/dev' if os.environ.get('LOCAL_DYNAMO', '0') == '0' else ''
+    return render_template('verify.html', token=request.args.get('token'), extra_url=u)
 
 
 @app.route('/qrcode', methods=['POST'])
