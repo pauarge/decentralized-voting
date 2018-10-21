@@ -156,6 +156,20 @@ def proof():
     return jsonify({'error': 'invalid parameters'}), 400
 
 
+@app.route('/verify', methods=['POST'])
+def verify():
+    data = request.get_json()
+    if 'token' in data:
+        for user in app.blocks[-1]['voted']:
+            sha = hashlib.sha1()
+            sha.update("{}{}".format(app.blocks[-1]['id'], user.get('id')).encode('utf-8'))
+            if sha.hexdigest() == data.get('token'):
+                return jsonify({'valid': True})
+        return jsonify({'error': 'vote not registered'}), 400
+
+    return jsonify({'error': 'invalid parameters'}), 400
+
+
 @app.route('/results', methods=['POST'])
 def results():
     if app.blocks[-1]['expiration'] > time.time():
