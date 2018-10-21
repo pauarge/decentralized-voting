@@ -172,8 +172,8 @@ def verify_token():
 
 @app.route('/results', methods=['POST'])
 def results():
-    if app.blocks[-1]['expiration'] > time.time():
-        return 'results not available yet'
+    # if app.blocks[-1]['expiration'] > time.time():
+    #    return 'results not available yet'
 
     current_results = defaultdict(int)
     reversed_blocks = reversed(app.blocks)
