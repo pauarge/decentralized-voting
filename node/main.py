@@ -145,7 +145,7 @@ def vote():
                 app.blocks.append(new_block)
                 app.model.save(app.blocks, app.secret_key)
                 send_verification_email(app.blocks[-1], request.headers.get('host'), result_hash)
-                broadcast_blocks(app.blocks, app.known_hosts)
+                # broadcast_blocks(app.blocks, app.known_hosts)
                 return jsonify({'verification': result_hash})
 
         return jsonify({'error': 'vote not registered'}), 400

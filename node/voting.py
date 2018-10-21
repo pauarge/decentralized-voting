@@ -22,6 +22,7 @@ def validate_token(election, token):
         sha = hashlib.sha1()
         sha.update("{}{}{}{}".format(SALT_QR, user.get('email'), user.get('id'), election['id']).encode('utf-8'))
         if user.get('id') not in election['voted'] and sha.hexdigest() == token:
+        # if sha.hexdigest() == token:
             return user.get('id')
     return None
 
