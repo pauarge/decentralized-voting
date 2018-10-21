@@ -10,60 +10,84 @@ import "./normalize.css";
 import "./App.scss";
 import CandidateInput from "./components/CandidateInput";
 import AddVoters from "./components/AddVoters";
+import { ErrorPage } from "./components/ErrorPage";
+import SuccessPage from "./components/SuccessPage";
+import VerifyVote from "./components/VerifyVote";
+import ResultsPage from "./components/ResultsPage";
+import { SERVER_PATH } from "./config";
 
 class App extends Component {
   constructor(props) {
     super(props);
-
+    this.fetchCurrentElection();
     this.state = {
       election: {
-        title: "Placeholder",
-        candidates: ["Bonadio Mclean", "Tiffney Bickis", "Grogin Dubie"],
-        candidatesB: [
-          "Peter Duke",
-          "Nope Nobel",
-          "Sandra Bollock",
-          "Román Luz",
-          "Arturo IV"
-        ],
+        description: "",
+        title: "",
+        candidates: [],
         deadline: new Date(2019, 1, 1)
       },
-      voters: []
+      voters: [],
+      voteIndex: 1
     };
+
+    this.electCandidate = this.electCandidate.bind(this);
     this.storeElection = this.storeElection.bind(this);
     this.storeVoters = this.storeVoters.bind(this);
+    this.fetchCurrentElection = this.fetchCurrentElection.bind(this);
+  }
+
+  async fetchCurrentElection() {
+    fetch(`${SERVER_PATH}/options`, {
+      method: "POST"
+    }).then(response => {
+      response.json().then(data => {
+        console.log(data);
+        this.setState({ election: data });
+      });
+    });
   }
 
   storeElection(election) {
-    console.log("Storng election");
+    // console.log("Storing election");
     this.setState({
       election
     });
   }
 
   storeVoters(voters) {
-    console.log("Storing voters");
+    // console.log(voters);
 
     const { election } = this.state;
 
-    this.setState(oldState => oldState.voters.concat(voters));
+    this.setState({
+      voters
+    });
 
-    fetch("http://127.0.0.1:5000/election", {
+    console.log(voters.voters);
+    // console.log([{ email: "bb816@ic.ac.uk", id: "111" }]);
+
+    fetch(`${SERVER_PATH}/election`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        users: [{ email: "bb816@ic.ac.uk", id: 111 }],
+        users: voters.voters,
         name: election.title,
+        description: election.description,
         expiration: 1540015431,
         options: election.candidates.map(candidate => candidate.name)
       })
     });
   }
 
+  electCandidate(voteIndex) {
+    this.setState({ voteIndex });
+  }
+
   render() {
-    const { election } = this.state;
+    const { election, voteIndex } = this.state;
     return (
       <Router>
         <>
@@ -80,6 +104,12 @@ class App extends Component {
                 <div className="Header__Link">
                   <Link to="/current">Current Election</Link>
                 </div>
+                <div className="Header__Link">
+                  <Link to="/verify">Verify Vote</Link>
+                </div>
+                <div className="Header__Link">
+                  <Link to="/results">Results</Link>
+                </div>
               </div>
             </div>
             <div className="Header__Lower">
@@ -88,39 +118,49 @@ class App extends Component {
           </div>
           <div className="Main">
             <Route exact path="/" render={() => <Home name={election.title}/>} />
+            <Route path="/results" component={ResultsPage} />
             <Route
               path="/create"
               render={() => <CreateElection onSubmit={this.storeElection} />}
             />
+            <Route path="/verify" render={() => <VerifyVote />} />
             <Route
               path="/add-voters"
               render={() => <AddVoters onSubmit={this.storeVoters} />}
             />
+            <Route path="/qr-error" render={() => <ErrorPage />} />
+            <Route path="/qr-success" render={() => <SuccessPage />} />
             <Route
-              path="/current"
+              path="/options"
               render={() => (
                 <ManagedElections
                   title={election.title}
+                  selectedIndex={voteIndex}
                   candidates={election.candidates}
-                  deadline={election.deadline}
+                  deadline={new Date(2019, 0, 1)}
                 />
               )}
             />
             <Route
-              path="/options"
+              path="/current"
               render={() => (
                 <CandidateInput
                   component={CandidateInput}
+                  onSelect={this.electCandidate}
                   title={election.title}
                   candidates={election.candidates}
-                  candidatesB={election.candidatesB}
                   deadline={election.deadline}
                 />
               )}
             />
             <Route
               path="/confirm"
-              component={VoteConfirmation}
+              render={() => (
+                <VoteConfirmation
+                  voteName={election.candidates[voteIndex].name}
+                  electionTitle={election.description}
+                />
+              )}
             />
             <Route
               path="/thank-you"

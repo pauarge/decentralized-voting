@@ -1,6 +1,7 @@
 {
   "name": "voting-node",
   "version": "0.1.0",
+  "homepage": "/decentralized-voting",
   "private": true,
   "dependencies": {
     "node-sass": "^4.9.4",
