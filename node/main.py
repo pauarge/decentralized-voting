@@ -4,7 +4,6 @@ from flask import Flask, request, jsonify, render_template, send_file
 from flask_cors import CORS
 from flask_qrcode import QRcode
 import requests
-import time
 import copy
 import json
 import hashlib
@@ -178,7 +177,7 @@ def results():
     current_results = defaultdict(int)
     reversed_blocks = reversed(app.blocks)
     for b in reversed_blocks:
-        payload = b['payload']
+        payload = b['results']
         if b['owner'] == app.server_id:
             res = decrypt_message(payload, app.secret_key, PADDING_CHAR)
         else:
