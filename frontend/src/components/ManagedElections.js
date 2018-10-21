@@ -74,6 +74,7 @@ export default class ManagedElections extends Component {
           <div className="QR__Container">
             <div className="QR__Placeholder">
               <QrReader
+                delay={1000}
                 style={previewStyle}
                 onError={this.handleError}
                 onScan={this.handleScan}
