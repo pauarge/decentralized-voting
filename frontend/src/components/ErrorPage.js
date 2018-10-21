@@ -3,13 +3,17 @@ import React from "react";
 import Footer from "./Footer/FooterContainer";
 import "../App.scss";
 import "./ManagedElections.scss";
+import "./VoteConfirmation.scss";
 
 export const ErrorPage = () => (
   <div>
-    <h1 className="Page__Title">Error, please try again</h1>
-    <p className="Page__Lead">
-      We did not recognize that QR code, please try again.
-    </p>
+    <div className="FeedbackAlert Feedback--Green">
+        <div className="FA__Error"></div>
+        <h1 className="FA__Title">Oops!</h1>
+        <p className="FA__Text">
+            An error occurred while processing your request. Please try again.
+        </p>
+    </div> 
     <Footer from="/options" fromLabel="Try again" />
   </div>
 );

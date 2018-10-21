@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import CreateElection from "./components/CreateElection";
 import ManagedElections from "./components/ManagedElections";
 import VoteConfirmation from "./components/VoteConfirmation";
-import VoteSubmitted from "./components/VoteSubmitted";
 import Home from "./components/Home";
 import Footer from "./components/Footer/FooterContainer";
 import "./normalize.css";
@@ -161,10 +160,6 @@ class App extends Component {
                   electionTitle={election.description}
                 />
               )}
-            />
-            <Route
-              path="/thank-you"
-              component={VoteSubmitted}
             />
           </div>
         </>
