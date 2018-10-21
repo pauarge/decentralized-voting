@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import Box from "./UI/Containers";
+import LinkButton from "./UI/LinkButton";
 
 export default class Home extends Component {
     render() {
@@ -14,7 +15,7 @@ export default class Home extends Component {
                             <p className="Page__Text">Voting process for {this.props.name} is currently open. Authenticate here to see the options available and cast your vote.</p>
 
                             <p className="Page__Text">
-                                <button className="Button Button__Green">Vote now</button>
+                                <LinkButton to="/current" className="Button Button__Green">Vote now</LinkButton>
                             </p>
                         </div>;
         } else {
@@ -30,7 +31,7 @@ export default class Home extends Component {
                         <h2 className="Page__Halftitle">Register a new event</h2>
                         <p className="Page__Text">Use the following form to sign up for a new electoral issue or voting event.</p>
                         <p className="Page__Text">
-                            <button className="Button Button__Secondary">Sign up</button>
+                            <LinkButton to="/create" className="Button Button__Secondary">Register</LinkButton>
                         </p>
                     </div>
                 </div>
