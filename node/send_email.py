@@ -14,7 +14,7 @@ def send_register_email(election, url):
         url += '/dev'
 
     # The subject line for the email.
-    SUBJECT = election.get('name')
+    SUBJECT = '{} - Decent Voting'.format(election.get('name'))
 
     # Create a new SES resource and specify a region.
     client = boto3.client('ses', region_name=AWS_REGION)
@@ -67,7 +67,7 @@ def send_verification_email(election, url, token):
         url += '/dev'
 
     # The subject line for the email.
-    SUBJECT = '{} - Voting Verification'.format(election.get('name'))
+    SUBJECT = '{} - Decent Voting Verification'.format(election.get('name'))
 
     # Create a new SES resource and specify a region.
     client = boto3.client('ses', region_name=AWS_REGION)
