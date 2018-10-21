@@ -179,7 +179,7 @@ def results():
     for b in reversed_blocks:
         payload = b['results']
         if b['owner'] == app.server_id:
-            res = decrypt_message(payload, app.secret_key, PADDING_CHAR)
+            res = decrypt_message(payload.encode('utf-8'), app.secret_key, PADDING_CHAR)
         else:
             res = requests.post(app.known_hosts[b['owner']], {'payload': payload}).json().get('result')
         option = res.split(',,,')[1]
