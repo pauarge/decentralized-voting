@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import CreateElection from "./components/CreateElection";
 import ManagedElections from "./components/ManagedElections";
 import VoteConfirmation from "./components/VoteConfirmation";
+import VoteSubmitted from "./components/VoteSubmitted";
+import Home from "./components/Home";
 import Footer from "./components/Footer/FooterContainer";
 import "./normalize.css";
 import "./App.scss";
@@ -85,12 +87,6 @@ class App extends Component {
   }
 
   render() {
-    const Home = () => (
-      <div>
-        <h2>Welcome page</h2>
-      </div>
-    );
-
     const { election, voteIndex } = this.state;
     return (
       <Router>
@@ -121,7 +117,7 @@ class App extends Component {
             </div>
           </div>
           <div className="Main">
-            <Route exact path="/" component={Home} />
+            <Route exact path="/" render={() => <Home name={election.title}/>} />
             <Route path="/results" component={ResultsPage} />
             <Route
               path="/create"
@@ -165,6 +161,10 @@ class App extends Component {
                   electionTitle={election.description}
                 />
               )}
+            />
+            <Route
+              path="/thank-you"
+              component={VoteSubmitted}
             />
           </div>
         </>
