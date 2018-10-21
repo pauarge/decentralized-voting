@@ -162,10 +162,6 @@ class App extends Component {
                 />
               )}
             />
-            <Route
-              path="/thank-you"
-              component={VoteSubmitted}
-            />
           </div>
         </>
       </Router>
