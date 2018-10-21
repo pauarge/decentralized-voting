@@ -10,6 +10,9 @@ import CandidateInput from "./components/CandidateInput";
 import AddVoters from "./components/AddVoters";
 import { ErrorPage } from "./components/ErrorPage";
 import SuccessPage from "./components/SuccessPage";
+import VerifyVote from "./components/VerifyVote";
+import ResultsPage from "./components/ResultsPage";
+import SERVER_PATH from "./config";
 
 class App extends Component {
   constructor(props) {
@@ -33,7 +36,7 @@ class App extends Component {
   }
 
   async fetchCurrentElection() {
-    fetch("http://127.0.0.1:5000/options", {
+    fetch(`${SERVER_PATH}/options`, {
       method: "POST"
     }).then(response => {
       response.json().then(data => {
@@ -62,7 +65,7 @@ class App extends Component {
     console.log(voters.voters);
     // console.log([{ email: "bb816@ic.ac.uk", id: "111" }]);
 
-    fetch("http://127.0.0.1:5000/election", {
+    fetch(`${SERVER_PATH}/election`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -108,6 +111,9 @@ class App extends Component {
                 <div className="Header__Link">
                   <Link to="/verify">Verify Vote</Link>
                 </div>
+                <div className="Header__Link">
+                  <Link to="/results">Results</Link>
+                </div>
               </div>
             </div>
             <div className="Header__Lower">
@@ -116,10 +122,12 @@ class App extends Component {
           </div>
           <div className="Main">
             <Route exact path="/" component={Home} />
+            <Route path="/results" component={ResultsPage} />
             <Route
               path="/create"
               render={() => <CreateElection onSubmit={this.storeElection} />}
             />
+            <Route path="/verify" render={() => <VerifyVote />} />
             <Route
               path="/add-voters"
               render={() => <AddVoters onSubmit={this.storeVoters} />}

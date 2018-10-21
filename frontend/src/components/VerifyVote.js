@@ -3,43 +3,29 @@ import PropTypes from "prop-types";
 import QrReader from "react-qr-reader";
 import { Redirect } from "react-router-dom";
 import Box from "./UI/Containers";
-import Footer from "./Footer/FooterContainer";
-import Poll, { PollOption } from "./UI/Poll";
 import "./ManagedElections.scss";
+import SERVER_PATH from "../config";
 
 export default class VerifyVote extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      result: null,
-      disabledTo: true
+      result: null
     };
 
     this.handleScan = this.handleScan.bind(this);
-    this.redirectOptions = this.redirectOptions.bind(this);
-  }
-
-  redirectOptions() {
-    if (this.state.responseCode === 400) {
-      return <Redirect to="/qr-error" />;
-    } else if (this.state.responseCode === 200) {
-      return <Redirect to="/qr-success" />;
-    }
   }
 
   handleScan(result) {
     console.log(this.state);
     if (result) {
       this.setState({
-        result,
-        disabledTo: false,
         responseCode: null
       });
       console.log(result);
-      console.log(this.props.selectedIndex);
 
-      fetch("http://127.0.0.1:5000/vote", {
+      fetch(`${SERVER_PATH}/vote`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -48,35 +34,21 @@ export default class VerifyVote extends Component {
           token: result,
           option: this.props.selectedIndex
         })
-      }).then(
-        response => this.setState({ responseCode: response.status })
-        // response.status === 400 ? (
-        //   <Redirect to="/current" />
-        // ) : (
-        //   console.log("Great success")
-        // )
-      );
+      }).then(response => this.setState({ responseCode: response.status }));
     }
-    // Make vote api call
   }
 
   handleError(err) {
     console.error(err);
   }
   render() {
-    const deadlineDate = this.props.deadline.toLocaleDateString();
     const previewStyle = {
       height: 240,
       width: 320
     };
     return (
       <>
-        <h1 className="Page__Title">
-          Welcome
-          <span className="Page__Title--deadline">
-            Deadline: {deadlineDate}
-          </span>
-        </h1>
+        <h1 className="Page__Title">Verify your vote</h1>
         <Box isLarge="false">
           <div className="QR__Container">
             <div className="QR__Placeholder">
@@ -88,23 +60,20 @@ export default class VerifyVote extends Component {
             </div>
             <div className="QR__Instructions">
               <h3 className="QR__Tagline">
-                Please scan the QR code provided to you in order to
-                authenticate.
+                Please scan the QR code provided to you in order to verify your
+                vote.
               </h3>
-              <p>First chunk of text.</p>
-              <p>Second chunk of text.</p>
+              {/* {this.state.result ? <h2>{fetch("http://127.0.0.1/proof", )}</h2>}     */}
             </div>
           </div>
         </Box>
-        {this.redirectOptions()}
+        {/* {this.redirectOptions()} */}
       </>
     );
   }
 }
 
-ManagedElections.propTypes = {
+VerifyVote.propTypes = {
   title: PropTypes.string.isRequired,
-  candidates: PropTypes.array.isRequired,
-  deadline: PropTypes.instanceOf(Date).isRequired,
   selectedIndex: PropTypes.number.isRequired
 };

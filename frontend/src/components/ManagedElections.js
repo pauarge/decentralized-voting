@@ -6,6 +6,7 @@ import Box from "./UI/Containers";
 import Footer from "./Footer/FooterContainer";
 import Poll, { PollOption } from "./UI/Poll";
 import "./ManagedElections.scss";
+import SERVER_PATH from "../config";
 
 export default class ManagedElections extends Component {
   constructor(props) {
@@ -39,7 +40,7 @@ export default class ManagedElections extends Component {
       console.log(result);
       console.log(this.props.selectedIndex);
 
-      fetch("http://127.0.0.1:5000/vote", {
+      fetch(`${SERVER_PATH}/vote`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
