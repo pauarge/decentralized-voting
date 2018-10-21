@@ -4,37 +4,34 @@ import QrReader from "react-qr-reader";
 import { Redirect } from "react-router-dom";
 import Box from "./UI/Containers";
 import "./ManagedElections.scss";
-import SERVER_PATH from "../config";
+import { SERVER_PATH } from "../config";
 
 export default class VerifyVote extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      result: null
+      tokenVerified: null
     };
 
     this.handleScan = this.handleScan.bind(this);
   }
 
   handleScan(result) {
-    console.log(this.state);
     if (result) {
-      this.setState({
-        responseCode: null
-      });
-      console.log(result);
-
-      fetch(`${SERVER_PATH}/vote`, {
+      fetch(`${SERVER_PATH}/verify`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          token: result,
-          option: this.props.selectedIndex
+          token: result
         })
-      }).then(response => this.setState({ responseCode: response.status }));
+      }).then(response => {
+        console.log(response);
+        let confirmed = response.status === 200;
+        this.setState({ tokenVerified: confirmed });
+      });
     }
   }
 
@@ -63,7 +60,13 @@ export default class VerifyVote extends Component {
                 Please scan the QR code provided to you in order to verify your
                 vote.
               </h3>
-              {/* {this.state.result ? <h2>{fetch("http://127.0.0.1/proof", )}</h2>}     */}
+              {this.state.tokenVerified ? (
+                <h2 style={{ color: "green" }}>
+                  Your vote has been registered.
+                </h2>
+              ) : (
+                <h2>Please try scanning the QR-code again.</h2>
+              )}
             </div>
           </div>
         </Box>

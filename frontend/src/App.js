@@ -12,7 +12,7 @@ import { ErrorPage } from "./components/ErrorPage";
 import SuccessPage from "./components/SuccessPage";
 import VerifyVote from "./components/VerifyVote";
 import ResultsPage from "./components/ResultsPage";
-import SERVER_PATH from "./config";
+import { SERVER_PATH } from "./config";
 
 class App extends Component {
   constructor(props) {

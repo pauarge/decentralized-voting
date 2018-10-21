@@ -6,7 +6,7 @@ import Box from "./UI/Containers";
 import Footer from "./Footer/FooterContainer";
 import Poll, { PollOption } from "./UI/Poll";
 import "./ManagedElections.scss";
-import SERVER_PATH from "../config";
+import { SERVER_PATH } from "../config";
 
 export default class ManagedElections extends Component {
   constructor(props) {
@@ -49,16 +49,8 @@ export default class ManagedElections extends Component {
           token: result,
           option: this.props.selectedIndex
         })
-      }).then(
-        response => this.setState({ responseCode: response.status })
-        // response.status === 400 ? (
-        //   <Redirect to="/current" />
-        // ) : (
-        //   console.log("Great success")
-        // )
-      );
+      }).then(response => this.setState({ responseCode: response.status }));
     }
-    // Make vote api call
   }
 
   handleError(err) {

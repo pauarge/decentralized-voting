@@ -157,12 +157,12 @@ def proof():
 
 
 @app.route('/verify', methods=['POST'])
-def verify():
+def verify_token():
     data = request.get_json()
     if 'token' in data:
         for user in app.blocks[-1]['voted']:
             sha = hashlib.sha1()
-            sha.update("{}{}".format(app.blocks[-1]['id'], user.get('id')).encode('utf-8'))
+            sha.update("{}{}".format(app.blocks[-1]['id'], user).encode('utf-8'))
             if sha.hexdigest() == data.get('token'):
                 return jsonify({'valid': True})
         return jsonify({'error': 'vote not registered'}), 400
