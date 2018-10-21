@@ -5,3 +5,29 @@
     border-radius: 4px;
     padding: 48px;
 }
+.Box__NP {
+    padding: 0;
+}
+.Flex__Double {
+    width: 100%;
+    display: flex;
+}
+.Flex__Separator {
+    flex: 3 !important;
+}
+.Flex__Half {
+    flex: 2;
+    padding: 42px;
+}
+.Flex__Grey {
+    background: #F7FAFF;
+}
+.Page__Pretitle {
+    margin-top: 32px;
+}
+.Flex__Half .Page__Text {
+    color: #151719;
+    line-height: 1.4;
+    margin-bottom: 24px;
+    margin-top: 12px;
+}
