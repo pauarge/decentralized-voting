@@ -26,6 +26,11 @@ app.model = Model()
 app.known_hosts = []
 
 
+@app.route("/")
+def hello():
+    return "hello"
+
+
 @app.route("/election", methods=['POST'])
 def election():
     data = request.get_json()
