@@ -4,7 +4,7 @@ import LinkButton from "./UI/LinkButton";
 
 export default class Home extends Component {
     render() {
-        const isElectionActive = this.props.name != '';
+        const isElectionActive = this.props.name !== '';
         let flexLeft;
 
         console.log(isElectionActive);

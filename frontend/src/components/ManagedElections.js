@@ -3,8 +3,6 @@ import PropTypes from "prop-types";
 import QrReader from "react-qr-reader";
 import { Redirect } from "react-router-dom";
 import Box from "./UI/Containers";
-import Footer from "./Footer/FooterContainer";
-import Poll, { PollOption } from "./UI/Poll";
 import "./ManagedElections.scss";
 import { SERVER_PATH } from "../config";
 

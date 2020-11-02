@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import QrReader from "react-qr-reader";
-import { Redirect } from "react-router-dom";
 import Box from "./UI/Containers";
 import "./ManagedElections.scss";
 import { SERVER_PATH } from "../config";
@@ -28,7 +27,6 @@ export default class VerifyVote extends Component {
           token: result
         })
       }).then(response => {
-        console.log(response);
         let confirmed = response.status === 200;
         this.setState({ tokenVerified: confirmed });
       });

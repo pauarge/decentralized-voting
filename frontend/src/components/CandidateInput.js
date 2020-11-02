@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import Box from "./UI/Containers";
 import Poll, { PollOption } from "./UI/Poll";
 import Footer from "./Footer/FooterContainer";
 import "./ManagedElections.scss";

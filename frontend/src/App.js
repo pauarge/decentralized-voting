@@ -4,7 +4,6 @@ import CreateElection from "./components/CreateElection";
 import ManagedElections from "./components/ManagedElections";
 import VoteConfirmation from "./components/VoteConfirmation";
 import Home from "./components/Home";
-import Footer from "./components/Footer/FooterContainer";
 import "./normalize.css";
 import "./App.scss";
 import CandidateInput from "./components/CandidateInput";
@@ -55,8 +54,6 @@ class App extends Component {
   }
 
   storeVoters(voters) {
-    // console.log(voters);
-
     const { election } = this.state;
 
     this.setState({

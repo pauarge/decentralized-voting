@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Doughnut } from "react-chartjs-2";
 
-import Footer from "./Footer/FooterContainer";
 import "../App.scss";
 import "./ManagedElections.scss";
 import { SERVER_PATH } from "../config";
@@ -69,8 +68,6 @@ export default class ResultsPage extends Component {
     );
     let datasets = { data, backgroundColor };
     let dataset = { labels, datasets: [datasets] };
-    console.log(data);
-    console.log(labels);
     return (
       <>
         <h1 className="Page__Title">The voting has ended.</h1>

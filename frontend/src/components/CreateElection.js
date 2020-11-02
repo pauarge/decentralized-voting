@@ -47,7 +47,7 @@ export default class CreateElection extends Component {
   };
 
   render() {
-    let { title, description, candidates } = this.state;
+    let { candidates } = this.state;
 
     const component = this.state.submitted ? (
       <Redirect to="/add-voters" />

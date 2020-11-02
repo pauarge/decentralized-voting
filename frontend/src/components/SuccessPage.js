@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import "./VoteConfirmation.scss";
 
-import Footer from "./Footer/FooterContainer";
 import "../App.scss";
 import "./ManagedElections.scss";
 

@@ -4,20 +4,12 @@ import PropTypes from "prop-types";
 import "./Poll.scss";
 
 export default class Poll extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return <div className="Poll">{this.props.children}</div>;
   }
 }
 
 export class PollOption extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const { candidateName, isSelected, onSelect, arrayIndex } = this.props;
 
